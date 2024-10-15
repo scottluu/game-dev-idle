@@ -13,14 +13,16 @@ FROM python:3.12.5-slim-bullseye
 
 WORKDIR /app
 
-RUN python -m venv venv && ./venv/bin/pip install poetry
+RUN python -m venv .venv && ./.venv/bin/pip install poetry
 COPY poetry.lock .
 COPY pyproject.toml .
-RUN ./venv/bin/poetry install
+RUN ./.venv/bin/poetry install
 COPY app.py .
 
 WORKDIR /app/frontend/dist
 
 COPY --from=node-builder /app/frontend/dist .
 
-CMD ./venv/bin/uvicorn app:app --port 8080 --host 0.0.0.0
+WORKDIR /app
+
+CMD ./.venv/bin/uvicorn app:app --port 8080 --host 0.0.0.0
