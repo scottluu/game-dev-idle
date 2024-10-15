@@ -23,4 +23,4 @@ WORKDIR /app/frontend/dist
 
 COPY --from=node-builder /app/frontend/dist .
 
-CMD ./venv/bin/uvicorn app:app --port 8080
+CMD ./venv/bin/uvicorn app:app --port 8080 --host 0.0.0.0
