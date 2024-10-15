@@ -14,10 +14,9 @@ FROM python:3.12.5-slim-bullseye
 WORKDIR /app
 
 RUN python -m venv .venv && ./.venv/bin/pip install poetry
-COPY poetry.lock .
-COPY pyproject.toml .
+COPY poetry.lock pyproject.toml ./
 RUN ./.venv/bin/poetry install
-COPY app.py .
+COPY app.py api_router.py ./
 
 WORKDIR /app/frontend/dist
 
