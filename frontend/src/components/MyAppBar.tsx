@@ -1,5 +1,5 @@
 import { Box, Dropdown, Menu, MenuButton, MenuItem } from "@mui/joy";
-import { AppBar, Button, IconButton, Toolbar, Typography } from "@mui/material";
+import { AppBar, Toolbar, Typography } from "@mui/material";
 import { useState } from "react";
 import GoogleIcon from "@mui/icons-material/Google";
 import useEmail from "../hooks/UseEmail";

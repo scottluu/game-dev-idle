@@ -1,6 +1,6 @@
 import UserSchema from "../schemas/UserSchema";
 import useLocalStorage from "./UseLocalStorage";
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import useIsLoggedIn from "./UseIsLoggedIn";
 
 const getEmail = async () => {
@@ -23,7 +23,7 @@ const useEmail = () => {
       try {
         const temp = await getEmail();
         setEmail(temp);
-      } catch (e) {
+      } catch {
         setIsLoggedIn(false);
       }
     };
