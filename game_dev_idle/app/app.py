@@ -1,7 +1,10 @@
+""""""
+
+from pathlib import Path
 from typing import Optional
 
 from litestar import Litestar, Response
-from litestar.exceptions import NotAuthorizedException
+from litestar.exceptions import NotAuthorizedException, NotFoundException
 from litestar.logging import LoggingConfig
 from litestar.static_files import create_static_files_router
 from pymongo import MongoClient
@@ -18,9 +21,10 @@ from game_dev_idle.app.unauthenticated_api_router import UNAUTHENTICATED_API_ROU
 
 
 def base_exception_handler(*args, **kwargs) -> Response[None]:
-    import traceback
+    """"""
+    import pdb
 
-    traceback.print_exc()
+    pdb.set_trace()
     return Response(status_code=500, content=None)
 
 
@@ -33,20 +37,37 @@ logging_config = LoggingConfig(
 )
 
 
+class MissingStaticFiles(Exception):
+    """"""
+
+
+STATIC_FILES_BASE_DIR = (
+    Path("/app") if ApiSettings().env == "prod" else Path(__file__).parent.parent.parent
+)
+STATIC_FILES_DIR = STATIC_FILES_BASE_DIR / "frontend/dist"
+if not STATIC_FILES_DIR.exists():
+    raise MissingStaticFiles(str(STATIC_FILES_DIR))
+
+
 app = Litestar(
     on_app_init=[oauth2_auth.on_app_init],
     route_handlers=[
         UNAUTHENTICATED_API_ROUTER,
         create_static_files_router(
-            path="app/auth/google/callback",
-            directories=["frontend/dist"],
+            path="/auth/google/callback",
+            directories=[STATIC_FILES_DIR],
             html_mode=True,
+            opt={"exclude_from_auth": True},
         ),
         create_static_files_router(
-            path="/", directories=["frontend/dist"], html_mode=True
+            path="/",
+            directories=[STATIC_FILES_DIR],
+            html_mode=True,
+            opt={"exclude_from_auth": True},
         ),
     ],
     exception_handlers={
+        NotFoundException: None,
         NotAuthorizedException: None,
         Exception: base_exception_handler,
     },
@@ -55,12 +76,11 @@ app = Litestar(
 
 
 def create_app(api_settings: Optional[ApiSettings] = None) -> Litestar:
+    """"""
     api_settings = api_settings or ApiSettings()
-    app.pdb_on_exception = api_settings.env == "dev"
     mongo_client_factory = MongoClientFactory(
         mongo_settings=api_settings.mongo_settings
     )
-    print(api_settings.model_dump())
     MongoClient(api_settings.mongo_settings.uri, connectTimeoutMS=5000).get_database(
         api_settings.mongo_settings.database_name
     ).list_collection_names()

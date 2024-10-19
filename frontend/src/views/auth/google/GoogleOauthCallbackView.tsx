@@ -7,10 +7,11 @@ import useEmail from "../../../hooks/UseEmail";
 import { jwtDecode } from "jwt-decode";
 import useLocalStorage from "../../../hooks/UseLocalStorage";
 import UserSchema from "../../../schemas/UserSchema";
+import useIsLoggedIn from "../../../hooks/UseIsLoggedIn";
 
 const GoogleOauthCallbackView = () => {
   const renderAfterCalled = useRef(false);
-  const { setter: setUser } = useLocalStorage<UserSchema>("user");
+  const { setIsLoggedIn } = useIsLoggedIn();
   const { email } = useEmail();
   let [searchParams] = useSearchParams();
   const code = searchParams.get("code");
@@ -19,20 +20,15 @@ const GoogleOauthCallbackView = () => {
   useEffect(() => {
     if (renderAfterCalled.current) return;
     fetch(`/public-api/auth/google/callback?code=${code}`).then((response) =>
-      response.json().then((value: OauthResponseSchema) => {
-        console.log(JSON.stringify(value));
-        const access_token = value.access_token;
-        const decoded = jwtDecode(access_token);
-        console.log(decoded.sub);
-        if (decoded.sub === undefined) return;
-        setUser({ email: decoded.sub });
+      response.json().then(() => {
+        setIsLoggedIn(true);
       }),
     );
     renderAfterCalled.current = true;
   }, []);
   useEffect(() => {
     if (email !== null && email !== undefined) {
-      console.log(email);
+      console.log("Email: ", email);
       window.location.href = "/";
     }
   }, [email]);

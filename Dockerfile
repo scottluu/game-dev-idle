@@ -32,7 +32,7 @@ FROM python:3.12.5-slim-bullseye
 COPY --from=builder /app/.venv /app/.venv
 COPY bin/* /usr/local/bin
 
-WORKDIR /app/game_dev_idle/app/frontend/dist
+WORKDIR /app/frontend/dist
 
 COPY --from=node-builder /app/frontend/dist .
 

@@ -1,3 +1,4 @@
+from logging import getLogger
 from typing import Any
 
 from dotenv import load_dotenv
@@ -58,6 +59,7 @@ async def get_unauthenticated_user_repository(
     database: AsyncIOMotorDatabase,
     session: AsyncIOMotorClientSession,
 ) -> UnauthenticatedUserRepository:
+    getLogger().info("UNAUTH USER REPO DI")
     return UnauthenticatedUserRepository(database=database, session=session)
 
 

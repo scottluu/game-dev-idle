@@ -1,3 +1,4 @@
+from logging import getLogger
 from typing import Optional, Annotated
 
 from litestar import get, Request, Response, Router
@@ -44,6 +45,7 @@ async def auth_google_callback(
     state_param: Annotated[Optional[str], Parameter(query="state", default=None)],
 ) -> Optional[Response[OAuth2Login]]:
     """Verify login"""
+    getLogger().info("hit google callback")
     with google_sso:
         user = await google_sso.verify_and_process(
             url=URL(str(request.url)),
@@ -84,4 +86,5 @@ UNAUTHENTICATED_API_ROUTER = Router(
         "mongo_client": Provide(get_mongo_client),
         "mongo_client_factory": Provide(get_mongo_client_factory),
     },
+    opt={"exclude_from_auth": True},
 )

@@ -25,7 +25,7 @@ oauth2_auth = OAuth2PasswordBearerAuth[User, Token](
     retrieve_user_handler=retrieve_user_handler,
     token_secret=ApiSettings().jwt_secret,
     # we are specifying the URL for retrieving a JWT access token
-    token_url="/api/auth/google/callback",
+    token_url="/public-api/auth/google/callback",
     # we are specifying which endpoints should be excluded from authentication. In this case the login endpoint
     # and our openAPI docs.
     route_handlers=[API_ROUTER],
