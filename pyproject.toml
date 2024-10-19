@@ -1,20 +1,28 @@
 [tool.poetry]
-name = "analyzer"
+name = "game-dev-idle"
 version = "0.1.0"
 description = ""
 authors = ["Your Name <you@example.com>"]
+packages = [{ include = "game_dev_idle"}]
+include = ["game_dev_idle/app/py.typed"]
 
 [tool.poetry.dependencies]
 python = "^3.12"
 aiofiles = "^24.1.0"
 uvicorn = "^0.31.1"
 litestar = "^2.12.1"
-pydantic = "^2.9.2"
+pydantic = {extras = ["email"], version = "^2.9.2"}
+pydantic-config = "^0.3.0"
+oauthlib = "^3.2.2"
+pyjwt = "^2.9.0"
+motor = {extras = ["srv"], version="<3.5.0"}
+pymongo = "<4.9"
 
 [tool.poetry.dev-dependencies]
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.6.8"
+mypy = "^1.12.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
