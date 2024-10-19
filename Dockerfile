@@ -40,4 +40,4 @@ WORKDIR /app
 
 ENV PATH=/app/.venv/bin:$PATH
 EXPOSE 8000
-CMD sh game-dev-idle-api
+CMD chmod +x /usr/local/bin/game-dev-idle-api && game-dev-idle-api
