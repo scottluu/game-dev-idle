@@ -22,7 +22,7 @@ const MyAppBar = () => {
   };
   const loginComponents = (
     <>
-      <MenuButton>Login via...</MenuButton>
+      <MenuButton style={{ marginLeft: "5vw" }}>Login via...</MenuButton>
       <Menu>
         <MenuItem onClick={handleGoogleLogin}>
           <GoogleIcon />
@@ -33,10 +33,10 @@ const MyAppBar = () => {
   );
 
   return (
-    <Box sx={{ flexGrow: 1, minWidth: "100%" }}>
+    <Box sx={{ flexGrow: 1, minWidth: "70vw" }}>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h3" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h3" component="div">
             Game Dev Idle
           </Typography>
           <Dropdown

@@ -52,7 +52,7 @@ const MainTab = () => {
               <Button
                 variant={"outlined"}
                 onClick={() => {
-                  dispatch(incrementMoney(1));
+                  dispatch(incrementMoney(-1));
                   dispatch(incrementFeatures(1));
                   dispatch(incrementBugs(features));
                 }}
