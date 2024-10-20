@@ -1,67 +1,103 @@
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import MyPaper from "./MyPaper";
 import { IconButton, Stack, Switch, Tooltip, Typography } from "@mui/material";
 import { Add, Remove } from "@mui/icons-material";
-import GameStateContext from "../contexts/GameState";
+import useAppSelector from "../hooks/useAppSelector";
+import { incrementBugFixers, toggleBugFixers } from "../slices/bugFixersSlice";
+import { incrementMoney } from "../slices/moneySlice";
+import {
+  incrementFeatureDevelopers,
+  toggleFeatureDevelopers,
+} from "../slices/featureDevelopersSlice";
+import useAppDispatch from "../hooks/useAppDispatch";
+import { Radio } from "@mui/joy";
+
+const computeCost = (
+  currentAmount: number,
+  hireAmount: number,
+  exponent: number,
+) => {
+  let result = 0;
+  for (let i = 0; i < hireAmount; i++) {
+    result += Math.pow(currentAmount + i, exponent);
+  }
+  return Math.round(result);
+};
+
+const computeRefund = (
+  currentAmount: number,
+  fireAmount: number,
+  exponent: number,
+) => {
+  if (currentAmount === 0) return 1;
+  let result = 0;
+  for (let i = 1; i < fireAmount + 1; i++) {
+    result += Math.pow(currentAmount - i, exponent);
+  }
+  return Math.round(result);
+};
+
+const BUG_FIXER_MULTIPLIER = 1.5;
+const FEATURE_DEVELOPER_MULTIPLIER = 4;
 
 const EmployeesTab = () => {
-  const gameStateContext = useContext(GameStateContext);
+  const [hireAmount, setHireAmount] = useState(1);
 
-  const setMoney = gameStateContext.money.setVal;
-  const money = gameStateContext.money.val;
+  const dispatch = useAppDispatch();
 
-  const features = gameStateContext.features.val;
-  const setFeatures = gameStateContext.features.setVal;
+  const money = useAppSelector((state) => state.money.value);
 
-  const bugs = gameStateContext.bugs.val;
-  const setBugs = gameStateContext.bugs.setVal;
+  const isBugFixersPaused = useAppSelector((state) => !state.bugFixers.enabled);
+  const isFeatureDevelopersPaused = useAppSelector(
+    (state) => !state.featureDevelopers.enabled,
+  );
 
-  const [isBugFixersPaused, setIsBugFixersPaused] = useState(false);
-  const [isFeatureDevelopersPaused, setIsFeatureDevelopersPaused] =
-    useState(false);
+  const featureDevelopers = useAppSelector(
+    (state) => state.featureDevelopers.value,
+  );
+  const bugFixers = useAppSelector((state) => state.bugFixers.value);
 
-  const featureDevelopers = gameStateContext.featureDevelopers.val;
-  const setFeatureDevelopers = gameStateContext.featureDevelopers.setVal;
+  const bugFixerCost = computeCost(bugFixers, hireAmount, BUG_FIXER_MULTIPLIER);
+  const bugFixersRefund = computeRefund(
+    bugFixers,
+    hireAmount,
+    BUG_FIXER_MULTIPLIER,
+  );
 
-  const bugFixers = gameStateContext.bugFixers.val;
-  const setBugFixers = gameStateContext.bugFixers.setVal;
-
-  const bugFixerCost = bugFixers === 0 ? 1 : Math.pow(bugFixers, 2);
-  const prevBugFixerCost = bugFixers === 0 ? 0 : Math.pow(bugFixers - 1, 2);
-  const featureDeveloperCost =
-    featureDevelopers === 0 ? 1 : Math.pow(featureDevelopers, 2);
-  const prevFeatureDeveloperCost =
-    featureDevelopers === 0 ? 0 : Math.pow(featureDevelopers - 1, 2);
-
-  const updateBugsAndFeatures = () => {
-    let bugsDelta = 0;
-    if (!isBugFixersPaused) {
-      bugsDelta -= bugFixers;
-    }
-    if (
-      (bugs === 0 || bugs < features) &&
-      !isFeatureDevelopersPaused &&
-      featureDevelopers > 0
-    ) {
-      setFeatures((prevState) => prevState + featureDevelopers);
-      bugsDelta += features * 2;
-    }
-    setBugs((prevState) => Math.max(0, prevState + bugsDelta));
-  };
-
-  useEffect(() => {
-    const interval = setInterval(updateBugsAndFeatures, 1000);
-    return () => clearInterval(interval);
-  }, [updateBugsAndFeatures]);
+  const featureDeveloperCost = computeCost(
+    featureDevelopers,
+    hireAmount,
+    FEATURE_DEVELOPER_MULTIPLIER,
+  );
+  const featureDevelopersRefund = computeRefund(
+    featureDevelopers,
+    hireAmount,
+    FEATURE_DEVELOPER_MULTIPLIER,
+  );
 
   return (
     <>
+      <MyPaper>
+        <Stack direction="row" spacing={3} sx={{ alignItems: "center" }}>
+          <Typography>Hire Amount:</Typography>
+          {[1, 5, 10, 25, 100].map((value) => {
+            return (
+              <Radio
+                checked={hireAmount === value}
+                onChange={() => setHireAmount(value)}
+                label={`${value}X`}
+                key={`radio-hire-amount-${value}`}
+              />
+            );
+          })}
+        </Stack>
+      </MyPaper>
       <MyPaper>
         <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
           <Typography>Off</Typography>
           <Switch
             checked={!isBugFixersPaused}
-            onChange={(_event, checked) => setIsBugFixersPaused(!checked)}
+            onChange={() => dispatch(toggleBugFixers())}
           />
           <Typography>On</Typography>
         </Stack>
@@ -75,12 +111,15 @@ const EmployeesTab = () => {
         >
           <div>
             <Tooltip
-              title={`+${prevBugFixerCost} Money, -1 Bug fixers${bugFixers === 0 ? " | No Bug Fixers to fire" : ""}`}
+              title={`+${bugFixersRefund} Money, -${hireAmount} Bug fixers${bugFixers === 0 ? " | No Bug Fixers to fire" : ""}`}
             >
               <div>
                 <IconButton
-                  disabled={bugFixers === 0}
-                  onClick={() => setBugFixers((prevState) => prevState - 1)}
+                  disabled={bugFixers < hireAmount}
+                  onClick={() => {
+                    dispatch(incrementBugFixers(-1 * hireAmount));
+                    dispatch(incrementMoney(-1 * bugFixerCost));
+                  }}
                 >
                   <Remove />
                 </IconButton>
@@ -90,14 +129,14 @@ const EmployeesTab = () => {
           <Typography>Bug fixers: {bugFixers}</Typography>
           <div>
             <Tooltip
-              title={`-${bugFixerCost} Money, +1 Bug fixers${money < bugFixerCost ? " | Not enough money" : ""}`}
+              title={`-${bugFixerCost} Money, +${hireAmount} Bug fixers${money < bugFixerCost ? " | Not enough money" : ""}`}
             >
               <div>
                 <IconButton
                   disabled={money < bugFixerCost}
                   onClick={() => {
-                    setMoney((prevState) => prevState - bugFixerCost);
-                    setBugFixers((prevState) => prevState + 1);
+                    dispatch(incrementMoney(-1 * bugFixerCost));
+                    dispatch(incrementBugFixers(hireAmount));
                   }}
                 >
                   <Add />
@@ -112,9 +151,7 @@ const EmployeesTab = () => {
           <Typography>Off</Typography>
           <Switch
             checked={!isFeatureDevelopersPaused}
-            onChange={(_event, checked) =>
-              setIsFeatureDevelopersPaused(!checked)
-            }
+            onChange={() => dispatch(toggleFeatureDevelopers())}
           />
           <Typography>On</Typography>
         </Stack>
@@ -128,14 +165,15 @@ const EmployeesTab = () => {
         >
           <div>
             <Tooltip
-              title={`+${prevFeatureDeveloperCost} Money, -1 Feature Developers${featureDevelopers === 0 ? " | No feature developers to fire" : ""}`}
+              title={`+${featureDevelopersRefund} Money, -${hireAmount} Feature Developers${featureDevelopers < hireAmount ? " | Not enough feature developers to fire" : ""}`}
             >
               <div>
                 <IconButton
-                  disabled={featureDevelopers === 0}
-                  onClick={() =>
-                    setFeatureDevelopers((prevState) => prevState - 1)
-                  }
+                  disabled={featureDevelopers < hireAmount}
+                  onClick={() => {
+                    dispatch(incrementFeatureDevelopers(-1 * hireAmount));
+                    dispatch(incrementMoney(featureDevelopersRefund));
+                  }}
                 >
                   <Remove />
                 </IconButton>
@@ -145,14 +183,14 @@ const EmployeesTab = () => {
           <Typography>Feature Developers: {featureDevelopers}</Typography>
           <div>
             <Tooltip
-              title={`-${featureDeveloperCost} Money, +1 Bug fixers${money < featureDeveloperCost ? " | Not enough money" : ""}`}
+              title={`-${featureDeveloperCost} Money, +${hireAmount} Feature Developers${money < featureDeveloperCost ? " | Not enough money" : ""}`}
             >
               <div>
                 <IconButton
                   disabled={money < featureDeveloperCost}
                   onClick={() => {
-                    setMoney((prevState) => prevState - featureDeveloperCost);
-                    setFeatureDevelopers((prevState) => prevState + 1);
+                    dispatch(incrementMoney(-1 * featureDeveloperCost));
+                    dispatch(incrementFeatureDevelopers(hireAmount));
                   }}
                 >
                   <Add />

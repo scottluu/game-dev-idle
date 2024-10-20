@@ -1,11 +1,14 @@
-import { Dispatch, SetStateAction } from "react";
-
 export type GameStats = {
+  name: string;
   bugs: number;
   features: number;
 };
 
-export type MyNumber = {
-  val: number;
-  setVal: Dispatch<SetStateAction<number>>;
-};
+export interface NumberState {
+  value: number;
+}
+
+export interface WorkerState {
+  value: number;
+  enabled: boolean;
+}
