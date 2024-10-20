@@ -16,12 +16,18 @@ export const getBooleanWithDefault = (
 
 export const computeMoneyPerSecond = (gameStat: GameStats) => {
   return (
-    Math.pow(gameStat.features, 1.25) / 100 - Math.pow(gameStat.bugs, 1.5) / 100
+    Math.pow(gameStat.features, 1.15) / 100 - Math.pow(gameStat.bugs, 1.5) / 100
   );
 };
 
 export const roundMoney = (value: number) => {
   const asCents = value * 100;
   if (asCents < 1000) return Math.round(asCents) / 100;
+  return Math.round(value);
+};
+
+export const roundPerSecond = (value: number) => {
+  if (Math.abs(value) < 1) return Math.round(value * 100) / 100;
+  if (Math.abs(value) < 10) return Math.round(value * 10) / 10;
   return Math.round(value);
 };

@@ -15,7 +15,7 @@ const useFeaturesPerSecond = () => {
     isFeatureDevelopersEnabled &&
     featureDevelopers > 0
   ) {
-    return featureDevelopers;
+    return Math.pow(featureDevelopers, 0.25);
   }
   return 0;
 };

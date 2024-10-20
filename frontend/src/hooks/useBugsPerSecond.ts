@@ -13,14 +13,14 @@ const useBugsPerSecond = () => {
   const features = useAppSelector((state) => state.features.value);
   let bugsDelta = 0;
   if (isBugFixersEnabled) {
-    bugsDelta -= bugFixers;
+    bugsDelta -= Math.pow(bugFixers, 0.6);
   }
   if (
     (bugs === 0 || bugs < features) &&
     isFeatureDevelopersEnabled &&
     featureDevelopers > 0
   ) {
-    bugsDelta += features * 2;
+    bugsDelta += features * 1.25;
   }
   return bugsDelta;
 };

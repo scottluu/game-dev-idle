@@ -37,7 +37,7 @@ const computeRefund = (
   return Math.round(result);
 };
 
-const BUG_FIXER_MULTIPLIER = 1.5;
+const BUG_FIXER_MULTIPLIER = 2;
 const FEATURE_DEVELOPER_MULTIPLIER = 4;
 
 const EmployeesTab = () => {

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Tooltip, Typography } from "@mui/material";
+import { Button, Stack, Tooltip, Typography } from "@mui/material";
 import MyPaper from "./MyPaper";
 import useAppSelector from "../hooks/useAppSelector";
 import { incrementMoney } from "../slices/moneySlice";
@@ -44,39 +44,41 @@ const MainTab = () => {
         </Tooltip>
       </MyPaper>
       <MyPaper>
-        <Tooltip
-          title={`-1 Money, +1 Feature${money === 0 ? " | Not enough money" : bugs > features ? " | Too many bugs" : ""}`}
-        >
-          <span>
-            <Button
-              variant={"outlined"}
-              onClick={() => {
-                dispatch(incrementMoney(1));
-                dispatch(incrementFeatures(1));
-                dispatch(incrementBugs(features));
-              }}
-              disabled={money < 1 || bugs > features}
-            >
-              Create game features
-            </Button>
-          </span>
-        </Tooltip>
-        <Tooltip
-          title={`-1 Money, -1 Bug${money < 1 ? " | Not enough money" : bugs === 0 ? " | No bugs to fix" : ""}`}
-        >
-          <span>
-            <Button
-              variant={"outlined"}
-              onClick={() => {
-                dispatch(incrementMoney(-1));
-                dispatch(incrementBugs(-1));
-              }}
-              disabled={money < 1 || bugs === 0}
-            >
-              Fix bugs
-            </Button>
-          </span>
-        </Tooltip>
+        <Stack direction="row" spacing={4}>
+          <Tooltip
+            title={`-1 Money, +1 Feature${money === 0 ? " | Not enough money" : bugs > features ? " | Too many bugs" : ""}`}
+          >
+            <span>
+              <Button
+                variant={"outlined"}
+                onClick={() => {
+                  dispatch(incrementMoney(1));
+                  dispatch(incrementFeatures(1));
+                  dispatch(incrementBugs(features));
+                }}
+                disabled={money < 1 || bugs > features}
+              >
+                Create game features
+              </Button>
+            </span>
+          </Tooltip>
+          <Tooltip
+            title={`-1 Money, -1 Bug${money < 1 ? " | Not enough money" : bugs === 0 ? " | No bugs to fix" : ""}`}
+          >
+            <span>
+              <Button
+                variant={"outlined"}
+                onClick={() => {
+                  dispatch(incrementMoney(-1));
+                  dispatch(incrementBugs(-1));
+                }}
+                disabled={money < 1 || bugs === 0}
+              >
+                Fix bugs
+              </Button>
+            </span>
+          </Tooltip>
+        </Stack>
       </MyPaper>
       {(features > 5 && bugs < features) || releasedGames.length > 0 ? (
         <MyPaper>

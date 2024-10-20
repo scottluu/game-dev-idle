@@ -13,6 +13,7 @@ import useMoneyPerSecond from "../hooks/useMoneyPerSecond";
 import useFeaturesPerSecond from "../hooks/useFeaturesPerSecond";
 import useBugsPerSecond from "../hooks/useBugsPerSecond";
 import ResetTab from "../components/ResetTab";
+import { roundPerSecond } from "../utils";
 
 const MainView = () => {
   const [tabIndex, setTabIndex] = useState(0);
@@ -43,16 +44,20 @@ const MainView = () => {
             </Typography>
           </Stack>
           <Stack direction="row" spacing={4} sx={{ alignItems: "baseline" }}>
-            <Typography variant={"h3"}>Features: {features}</Typography>
+            <Typography variant={"h3"}>
+              Features: {Math.round(features)}
+            </Typography>
             <Typography>
-              {featureDevelopers > 0 ? `(${featuresPerSecond}/s)` : null}
+              {featureDevelopers > 0
+                ? `(${roundPerSecond(featuresPerSecond)}/s)`
+                : null}
             </Typography>
           </Stack>
           <Stack direction="row" spacing={4} sx={{ alignItems: "baseline" }}>
-            <Typography variant={"h3"}>Bugs: {bugs}</Typography>
+            <Typography variant={"h3"}>Bugs: {Math.round(bugs)}</Typography>
             <Typography>
               {bugFixers + featureDevelopers > 0
-                ? `(${bugsPerSecond}/s)`
+                ? `(${roundPerSecond(bugsPerSecond)}/s)`
                 : null}
             </Typography>
           </Stack>
