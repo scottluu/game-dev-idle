@@ -15,7 +15,7 @@ pydantic = {extras = ["email"], version = "^2.9.2"}
 pydantic-config = "^0.3.0"
 oauthlib = "^3.2.2"
 pyjwt = "^2.9.0"
-motor = {extras = ["srv"], version="<3.5.0"}
+motor = {extras = ["srv"], version="<3.6.0"}
 pymongo = "<4.9"
 
 [tool.poetry.dev-dependencies]
