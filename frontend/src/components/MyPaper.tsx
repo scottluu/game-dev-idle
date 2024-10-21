@@ -1,13 +1,14 @@
-import React from "react";
+import React, { CSSProperties } from "react";
 import { Sheet } from "@mui/joy";
 
 type MyPaperProps = {
   children: React.ReactNode;
+  style?: CSSProperties | undefined;
 };
 
 const MyPaper = (props: MyPaperProps) => {
   return (
-    <Sheet style={{ margin: "1rem", padding: "1rem" }}>{props.children}</Sheet>
+    <Sheet style={{ padding: "1rem", ...props.style }}>{props.children}</Sheet>
   );
 };
 

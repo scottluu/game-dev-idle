@@ -12,6 +12,7 @@ import { featureDeveloperCostReducer } from "./slices/featureDeveloperCostSlice"
 import { gameProfitabilityReducer } from "./slices/gameProfitabilitySlice";
 import { bugFixerProductivityReducer } from "./slices/bugFixerProductivitySlice";
 import { featureDeveloperProductivityReducer } from "./slices/featureDeveloperProductivitySlice";
+import { clickingStrengthReducer } from "./slices/clickingStrengthSlice";
 
 export const store = configureStore({
   reducer: {
@@ -28,6 +29,7 @@ export const store = configureStore({
     featureDeveloperCost: featureDeveloperCostReducer,
     featureDeveloperProductivity: featureDeveloperProductivityReducer,
     gameProfitability: gameProfitabilityReducer,
+    clickingStrength: clickingStrengthReducer,
   },
 });
 

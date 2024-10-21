@@ -27,6 +27,9 @@ const GameStateSaver = () => {
   const featureDeveloperProductivity = useAppSelector(
     (state) => state.featureDeveloperProductivity.value,
   );
+  const clickingStrength = useAppSelector(
+    (state) => state.clickingStrength.value,
+  );
   const bugFixers = useAppSelector((state) => state.bugFixers.value);
   const bugFixersEnabled = useAppSelector((state) => state.bugFixers.enabled);
   const bugFixerProductivity = useAppSelector(
@@ -72,6 +75,8 @@ const GameStateSaver = () => {
         localStorage.setItem("gameProfitability", gameProfitability.toString());
         localStorage.setItem("bugFixerCost", bugFixerCost.toString());
         localStorage.setItem("bugsPerFeature", bugsPerFeature.toString());
+        localStorage.setItem("clickingStrength", clickingStrength.toString());
+
         localStorage.setItem("lastSave", now.toString());
         return now;
       });

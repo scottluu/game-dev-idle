@@ -11,7 +11,7 @@ import {
 } from "../slices/releasedGamesSlice";
 import useAppDispatch from "../hooks/useAppDispatch";
 import GameNamingModal from "./GameNamingModal";
-import { computeMoneyPerSecond, roundMoney } from "../utils";
+import { computeMoneyPerSecond, roundMoney, roundPerSecond } from "../utils";
 import CompanyNamingModal from "./CompanyNamingModal";
 import { appendCompany } from "../slices/soldCompaniesSlice";
 import { resetFeatureDevelopers } from "../slices/featureDevelopersSlice";
@@ -46,6 +46,9 @@ const MainTab = () => {
     });
 
   const money = useAppSelector((state) => state.money.value);
+  const clickingStrength = useAppSelector(
+    (state) => state.clickingStrength.value,
+  );
   const bugs = useAppSelector((state) => state.bugs.value);
   const features = useAppSelector((state) => state.features.value);
   const releasedGames = useAppSelector((state) => state.releasedGames.value);
@@ -107,59 +110,56 @@ const MainTab = () => {
   const additionalMoneyPerSecond = roundMoney(
     computeMoneyPerSecond({ bugs, features, name: "" }, gameProfitability),
   );
+  const perClick = Math.pow(1.3, clickingStrength);
   return (
     <>
-      <MyPaper>
-        <Tooltip title={"+1 Money"}>
-          <Button
-            variant={"outlined"}
-            onClick={() => dispatch(incrementMoney(1))}
-          >
-            Work day job
-          </Button>
+      <Tooltip title={`+${roundPerSecond(perClick)} Money`}>
+        <Button
+          variant={"outlined"}
+          onClick={() => dispatch(incrementMoney(perClick))}
+        >
+          Work day job
+        </Button>
+      </Tooltip>
+      <Stack direction="row" spacing={4} style={{ marginTop: "1rem" }}>
+        <Tooltip
+          title={`-1 Money, +${roundPerSecond(perClick)} Feature, +${Math.round(features * Math.pow(0.9, bugsPerFeature))} Bugs${money === 0 ? " | Not enough money" : bugs > features ? " | Too many bugs" : ""}`}
+        >
+          <span>
+            <Button
+              variant={"outlined"}
+              onClick={() => {
+                dispatch(incrementMoney(-1));
+                dispatch(incrementFeatures(perClick));
+                dispatch(
+                  incrementBugs(features * Math.pow(0.9, bugsPerFeature)),
+                );
+              }}
+              disabled={money < 1 || bugs > features}
+            >
+              Create game features
+            </Button>
+          </span>
         </Tooltip>
-      </MyPaper>
-      <MyPaper>
-        <Stack direction="row" spacing={4}>
-          <Tooltip
-            title={`-1 Money, +1 Feature, +${Math.round(features * Math.pow(0.9, bugsPerFeature))} Bugs${money === 0 ? " | Not enough money" : bugs > features ? " | Too many bugs" : ""}`}
-          >
-            <span>
-              <Button
-                variant={"outlined"}
-                onClick={() => {
-                  dispatch(incrementMoney(-1));
-                  dispatch(incrementFeatures(1));
-                  dispatch(
-                    incrementBugs(features * Math.pow(0.9, bugsPerFeature)),
-                  );
-                }}
-                disabled={money < 1 || bugs > features}
-              >
-                Create game features
-              </Button>
-            </span>
-          </Tooltip>
-          <Tooltip
-            title={`-1 Money, -1 Bug${money < 1 ? " | Not enough money" : bugs === 0 ? " | No bugs to fix" : ""}`}
-          >
-            <span>
-              <Button
-                variant={"outlined"}
-                onClick={() => {
-                  dispatch(incrementMoney(-1));
-                  dispatch(incrementBugs(-1));
-                }}
-                disabled={money < 1 || bugs === 0}
-              >
-                Fix bugs
-              </Button>
-            </span>
-          </Tooltip>
-        </Stack>
-      </MyPaper>
+        <Tooltip
+          title={`-1 Money, -${roundPerSecond(perClick)} Bug${money < 1 ? " | Not enough money" : bugs === 0 ? " | No bugs to fix" : ""}`}
+        >
+          <span>
+            <Button
+              variant={"outlined"}
+              onClick={() => {
+                dispatch(incrementMoney(-1));
+                dispatch(incrementBugs(-1 * perClick));
+              }}
+              disabled={money < 1 || bugs === 0}
+            >
+              Fix bugs
+            </Button>
+          </span>
+        </Tooltip>
+      </Stack>
       {(features > 5 && bugs < features) || releasedGames.length > 0 ? (
-        <MyPaper>
+        <div style={{ marginTop: "1rem" }}>
           <Typography>
             Projected additional earnings per second:
             {additionalMoneyPerSecond}
@@ -173,10 +173,10 @@ const MainTab = () => {
           >
             Release Game
           </Button>
-        </MyPaper>
+        </div>
       ) : null}
       {specializationPoints > 0 ? (
-        <MyPaper>
+        <>
           <Typography>
             Sell your company to gain {specializationPoints} specialization
             points
@@ -189,7 +189,7 @@ const MainTab = () => {
           >
             Sell company
           </Button>
-        </MyPaper>
+        </>
       ) : null}
       <GameNamingModal
         open={gameNamingModalOpen}

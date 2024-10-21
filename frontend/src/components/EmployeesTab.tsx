@@ -1,5 +1,4 @@
 import { useState } from "react";
-import MyPaper from "./MyPaper";
 import { IconButton, Stack, Switch, Tooltip, Typography } from "@mui/joy";
 import { Add, Remove } from "@mui/icons-material";
 import useAppSelector from "../hooks/useAppSelector";
@@ -93,129 +92,123 @@ const EmployeesTab = () => {
 
   return (
     <>
-      <MyPaper>
-        <Stack direction="row" spacing={3} sx={{ alignItems: "center" }}>
-          <Typography>Hire Amount:</Typography>
-          {[1, 5, 10, 25, 100].map((value) => {
-            return (
-              <Radio
-                checked={hireAmount === value}
-                onChange={() => setHireAmount(value)}
-                label={`${value}X`}
-                key={`radio-hire-amount-${value}`}
-              />
-            );
-          })}
-        </Stack>
-      </MyPaper>
-      <MyPaper>
-        <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
-          <Typography>Off</Typography>
-          <Switch
-            checked={!isBugFixersPaused}
-            onChange={() => dispatch(toggleBugFixers())}
-          />
-          <Typography>On</Typography>
-        </Stack>
-        <Stack
-          direction={"row"}
-          spacing={2}
-          sx={{
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div>
-            <Tooltip
-              title={`+${bugFixersRefund} Money, -${hireAmount} Bug fixers${bugFixers === 0 ? " | No Bug Fixers to fire" : ""}`}
-            >
-              <div>
-                <IconButton
-                  disabled={bugFixers < hireAmount}
-                  onClick={() => {
-                    dispatch(incrementBugFixers(-1 * hireAmount));
-                    dispatch(incrementMoney(bugFixersRefund));
-                  }}
-                >
-                  <Remove />
-                </IconButton>
-              </div>
-            </Tooltip>
-          </div>
-          <Typography>Bug fixers: {bugFixers}</Typography>
-          <div>
-            <Tooltip
-              title={`-${bugFixerCostAmount} Money, +${hireAmount} Bug fixers${money < bugFixerCostAmount ? " | Not enough money" : ""}`}
-            >
-              <div>
-                <IconButton
-                  disabled={money < bugFixerCostAmount}
-                  onClick={() => {
-                    dispatch(incrementMoney(-1 * bugFixerCostAmount));
-                    dispatch(incrementBugFixers(hireAmount));
-                  }}
-                >
-                  <Add />
-                </IconButton>
-              </div>
-            </Tooltip>
-          </div>
-        </Stack>
-      </MyPaper>
-      <MyPaper>
-        <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
-          <Typography>Off</Typography>
-          <Switch
-            checked={!isFeatureDevelopersPaused}
-            onChange={() => dispatch(toggleFeatureDevelopers())}
-          />
-          <Typography>On</Typography>
-        </Stack>
-        <Stack
-          direction={"row"}
-          spacing={2}
-          sx={{
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div>
-            <Tooltip
-              title={`+${featureDevelopersRefund} Money, -${hireAmount} Feature Developers${featureDevelopers < hireAmount ? " | Not enough feature developers to fire" : ""}`}
-            >
-              <div>
-                <IconButton
-                  disabled={featureDevelopers < hireAmount}
-                  onClick={() => {
-                    dispatch(incrementFeatureDevelopers(-1 * hireAmount));
-                    dispatch(incrementMoney(featureDevelopersRefund));
-                  }}
-                >
-                  <Remove />
-                </IconButton>
-              </div>
-            </Tooltip>
-          </div>
-          <Typography>Feature Developers: {featureDevelopers}</Typography>
-          <div>
-            <Tooltip
-              title={`-${featureDeveloperCostAmount} Money, +${hireAmount} Feature Developers${money < featureDeveloperCostAmount ? " | Not enough money" : ""}`}
-            >
-              <div>
-                <IconButton
-                  disabled={money < featureDeveloperCostAmount}
-                  onClick={() => {
-                    dispatch(incrementMoney(-1 * featureDeveloperCostAmount));
-                    dispatch(incrementFeatureDevelopers(hireAmount));
-                  }}
-                >
-                  <Add />
-                </IconButton>
-              </div>
-            </Tooltip>
-          </div>
-        </Stack>
-      </MyPaper>
+      <Stack direction="row" spacing={3} sx={{ alignItems: "center" }}>
+        <Typography>Hire Amount:</Typography>
+        {[1, 5, 10, 25, 100].map((value) => {
+          return (
+            <Radio
+              checked={hireAmount === value}
+              onChange={() => setHireAmount(value)}
+              label={`${value}X`}
+              key={`radio-hire-amount-${value}`}
+            />
+          );
+        })}
+      </Stack>
+      <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+        <Typography>Off</Typography>
+        <Switch
+          checked={!isBugFixersPaused}
+          onChange={() => dispatch(toggleBugFixers())}
+        />
+        <Typography>On</Typography>
+      </Stack>
+      <Stack
+        direction={"row"}
+        spacing={2}
+        sx={{
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <div>
+          <Tooltip
+            title={`+${bugFixersRefund} Money, -${hireAmount} Bug fixers${bugFixers === 0 ? " | No Bug Fixers to fire" : ""}`}
+          >
+            <div>
+              <IconButton
+                disabled={bugFixers < hireAmount}
+                onClick={() => {
+                  dispatch(incrementBugFixers(-1 * hireAmount));
+                  dispatch(incrementMoney(bugFixersRefund));
+                }}
+              >
+                <Remove />
+              </IconButton>
+            </div>
+          </Tooltip>
+        </div>
+        <Typography>Bug fixers: {bugFixers}</Typography>
+        <div>
+          <Tooltip
+            title={`-${bugFixerCostAmount} Money, +${hireAmount} Bug fixers${money < bugFixerCostAmount ? " | Not enough money" : ""}`}
+          >
+            <div>
+              <IconButton
+                disabled={money < bugFixerCostAmount}
+                onClick={() => {
+                  dispatch(incrementMoney(-1 * bugFixerCostAmount));
+                  dispatch(incrementBugFixers(hireAmount));
+                }}
+              >
+                <Add />
+              </IconButton>
+            </div>
+          </Tooltip>
+        </div>
+      </Stack>
+      <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+        <Typography>Off</Typography>
+        <Switch
+          checked={!isFeatureDevelopersPaused}
+          onChange={() => dispatch(toggleFeatureDevelopers())}
+        />
+        <Typography>On</Typography>
+      </Stack>
+      <Stack
+        direction={"row"}
+        spacing={2}
+        sx={{
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <div>
+          <Tooltip
+            title={`+${featureDevelopersRefund} Money, -${hireAmount} Feature Developers${featureDevelopers < hireAmount ? " | Not enough feature developers to fire" : ""}`}
+          >
+            <div>
+              <IconButton
+                disabled={featureDevelopers < hireAmount}
+                onClick={() => {
+                  dispatch(incrementFeatureDevelopers(-1 * hireAmount));
+                  dispatch(incrementMoney(featureDevelopersRefund));
+                }}
+              >
+                <Remove />
+              </IconButton>
+            </div>
+          </Tooltip>
+        </div>
+        <Typography>Feature Developers: {featureDevelopers}</Typography>
+        <div>
+          <Tooltip
+            title={`-${featureDeveloperCostAmount} Money, +${hireAmount} Feature Developers${money < featureDeveloperCostAmount ? " | Not enough money" : ""}`}
+          >
+            <div>
+              <IconButton
+                disabled={money < featureDeveloperCostAmount}
+                onClick={() => {
+                  dispatch(incrementMoney(-1 * featureDeveloperCostAmount));
+                  dispatch(incrementFeatureDevelopers(hireAmount));
+                }}
+              >
+                <Add />
+              </IconButton>
+            </div>
+          </Tooltip>
+        </div>
+      </Stack>
     </>
   );
 };

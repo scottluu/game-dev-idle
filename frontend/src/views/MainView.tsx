@@ -16,8 +16,6 @@ import ResetTab from "../components/ResetTab";
 import { roundPerSecond } from "../utils";
 
 const MainView = () => {
-  const [tabIndex, setTabIndex] = useState(0);
-
   const money = useAppSelector((state) => state.money.value);
   const bugs = useAppSelector((state) => state.bugs.value);
   const bugFixers = useAppSelector((state) => state.bugFixers.value);
@@ -31,11 +29,11 @@ const MainView = () => {
   const bugsPerSecond = useBugsPerSecond();
 
   return (
-    <>
+    <div style={{ width: "70vw" }}>
       <GameStateManager />
       <GameStateSaver />
       <MyAppBar />
-      <MyPaper>
+      <MyPaper style={{ marginBottom: "1rem" }}>
         <Stack direction="column" spacing={2}>
           <Stack direction="row" spacing={4} sx={{ alignItems: "baseline" }}>
             <Typography level={"h1"}>${Math.round(money)}</Typography>
@@ -84,7 +82,7 @@ const MainView = () => {
           <ResetTab />
         </TabPanel>
       </Tabs>
-    </>
+    </div>
   );
 };
 
