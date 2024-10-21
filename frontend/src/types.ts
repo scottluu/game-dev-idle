@@ -20,6 +20,7 @@ export type SpecializationPointAssignment = {
   featureDeveloperProductivity: number;
   gameProfitability: number;
   bugsPerFeature: number;
+  clickingStrength: number;
 };
 
 export const computeSpentSpecPoints = (
@@ -32,5 +33,6 @@ export const computeSpentSpecPoints = (
     value.featureDeveloperCost,
     value.gameProfitability,
     value.bugsPerFeature,
+    value.clickingStrength,
   ].reduce((previousValue, currentValue) => previousValue + currentValue);
 };

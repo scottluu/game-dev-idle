@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Button, Stack, Tooltip, Typography } from "@mui/joy";
-import MyPaper from "./MyPaper";
 import useAppSelector from "../hooks/useAppSelector";
 import { incrementMoney, resetMoney } from "../slices/moneySlice";
 import { incrementFeatures, resetFeatures } from "../slices/featuresSlice";
@@ -43,6 +42,7 @@ const MainTab = () => {
       featureDeveloperCost: 0,
       featureDeveloperProductivity: 0,
       gameProfitability: 0,
+      clickingStrength: 0,
     });
 
   const money = useAppSelector((state) => state.money.value);
@@ -161,8 +161,7 @@ const MainTab = () => {
       {(features > 5 && bugs < features) || releasedGames.length > 0 ? (
         <div style={{ marginTop: "1rem" }}>
           <Typography>
-            Projected additional earnings per second:
-            {additionalMoneyPerSecond}
+            Projected additional earnings per second: {additionalMoneyPerSecond}
           </Typography>
           <Button
             variant={"outlined"}
@@ -178,7 +177,7 @@ const MainTab = () => {
       {specializationPoints > 0 ? (
         <>
           <Typography>
-            Sell your company to gain {specializationPoints} specialization
+            Sell your company to gain {specializationPoints} specialization{" "}
             points
           </Typography>
           <Button

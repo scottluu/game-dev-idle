@@ -78,6 +78,9 @@ const SpecializationPointAssignmentSection = (
     (state) => state.gameProfitability.value,
   );
   const bugsPerFeature = useAppSelector((state) => state.bugsPerFeature.value);
+  const clickingStrength = useAppSelector(
+    (state) => state.clickingStrength.value,
+  );
 
   const cannotSpendMore = spentSpecializationPoints === specializationPoints;
   const bugFixerCostRow = (
@@ -216,11 +219,35 @@ const SpecializationPointAssignmentSection = (
       currentLevel={gameProfitability}
     />
   );
+  const clickingStrengthRow = (
+    <Row
+      text={"Increase clicking strength"}
+      rowPoints={props.specializationPointAssignment.clickingStrength}
+      onRemove={() =>
+        props.setSpecializationPointAssignment((prevState) => {
+          return {
+            ...prevState,
+            clickingStrength: prevState.clickingStrength - 1,
+          };
+        })
+      }
+      onAdd={() =>
+        props.setSpecializationPointAssignment((prevState) => {
+          return {
+            ...prevState,
+            clickingStrength: prevState.clickingStrength + 1,
+          };
+        })
+      }
+      cannotAdd={cannotSpendMore}
+      currentLevel={clickingStrength}
+    />
+  );
 
   return (
     <>
       <Typography>
-        Assign specialization points! Spent {spentSpecializationPoints} out of
+        Assign specialization points! Spent {spentSpecializationPoints} out of{" "}
         {specializationPoints}
       </Typography>
       <Stack direction="column" spacing={2}>
@@ -230,6 +257,7 @@ const SpecializationPointAssignmentSection = (
         {featureDeveloperProductivityRow}
         {bugsPerFeatureRow}
         {gameProfitabilityRow}
+        {clickingStrengthRow}
       </Stack>
     </>
   );
