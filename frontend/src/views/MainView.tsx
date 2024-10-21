@@ -14,6 +14,8 @@ import useFeaturesPerSecond from "../hooks/useFeaturesPerSecond";
 import useBugsPerSecond from "../hooks/useBugsPerSecond";
 import ResetTab from "../components/ResetTab";
 import { roundPerSecond } from "../utils";
+import useLastSave from "../hooks/UseLastSave";
+import OfflineLoader from "../components/OfflineLoader";
 
 const MainView = () => {
   const money = useAppSelector((state) => state.money.value);
@@ -27,6 +29,11 @@ const MainView = () => {
   const moneyPerSecond = useMoneyPerSecond();
   const featuresPerSecond = useFeaturesPerSecond();
   const bugsPerSecond = useBugsPerSecond();
+  const { lastSave } = useLastSave();
+
+  if (lastSave + 30000 < Date.now()) {
+    return <OfflineLoader />;
+  }
 
   return (
     <div style={{ width: "70vw" }}>

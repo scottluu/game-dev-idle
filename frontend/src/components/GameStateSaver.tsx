@@ -1,14 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import useAppSelector from "../hooks/useAppSelector";
-
-const loadLastSave = () => {
-  const fromLocalStorage = localStorage.getItem("lastSave");
-  if (fromLocalStorage === null) return Date.now();
-  return new Date(Number.parseFloat(fromLocalStorage)).getTime();
-};
+import useLastSave from "../hooks/UseLastSave";
 
 const GameStateSaver = () => {
-  const [, setLastSave] = useState<number>(loadLastSave());
+  const { lastSave, setLastSave } = useLastSave();
 
   const money = useAppSelector((state) => state.money.value);
   const bugs = useAppSelector((state) => state.bugs.value);
@@ -45,41 +40,39 @@ const GameStateSaver = () => {
 
   useEffect(() => {
     const save = () => {
-      setLastSave((prevState) => {
-        const now = Date.now();
-        if (now < prevState + 5000) return prevState;
-        localStorage.setItem("bugs", bugs.toString());
-        localStorage.setItem("features", features.toString());
-        localStorage.setItem("money", money.toString());
-        localStorage.setItem("bugFixers", bugFixers.toString());
-        localStorage.setItem("bugFixers.enabled", bugFixersEnabled.toString());
-        localStorage.setItem(
-          "bugFixerProductivity",
-          bugFixerProductivity.toString(),
-        );
-        localStorage.setItem("featureDevelopers", featureDevelopers.toString());
-        localStorage.setItem(
-          "featureDevelopers.enabled",
-          featureDevelopersEnabled.toString(),
-        );
-        localStorage.setItem(
-          "featureDevelopersCost",
-          featureDeveloperCost.toString(),
-        );
-        localStorage.setItem(
-          "featureDeveloperProductivity",
-          featureDeveloperProductivity.toString(),
-        );
-        localStorage.setItem("releasedGames", JSON.stringify(releasedGames));
-        localStorage.setItem("soldCompanies", JSON.stringify(soldCompanies));
-        localStorage.setItem("gameProfitability", gameProfitability.toString());
-        localStorage.setItem("bugFixerCost", bugFixerCost.toString());
-        localStorage.setItem("bugsPerFeature", bugsPerFeature.toString());
-        localStorage.setItem("clickingStrength", clickingStrength.toString());
+      const now = Date.now();
+      if (now < lastSave + 5000) return;
+      localStorage.setItem("bugs", bugs.toString());
+      localStorage.setItem("features", features.toString());
+      localStorage.setItem("money", money.toString());
+      localStorage.setItem("bugFixers", bugFixers.toString());
+      localStorage.setItem("bugFixers.enabled", bugFixersEnabled.toString());
+      localStorage.setItem(
+        "bugFixerProductivity",
+        bugFixerProductivity.toString(),
+      );
+      localStorage.setItem("featureDevelopers", featureDevelopers.toString());
+      localStorage.setItem(
+        "featureDevelopers.enabled",
+        featureDevelopersEnabled.toString(),
+      );
+      localStorage.setItem(
+        "featureDevelopersCost",
+        featureDeveloperCost.toString(),
+      );
+      localStorage.setItem(
+        "featureDeveloperProductivity",
+        featureDeveloperProductivity.toString(),
+      );
+      localStorage.setItem("releasedGames", JSON.stringify(releasedGames));
+      localStorage.setItem("soldCompanies", JSON.stringify(soldCompanies));
+      localStorage.setItem("gameProfitability", gameProfitability.toString());
+      localStorage.setItem("bugFixerCost", bugFixerCost.toString());
+      localStorage.setItem("bugsPerFeature", bugsPerFeature.toString());
+      localStorage.setItem("clickingStrength", clickingStrength.toString());
 
-        localStorage.setItem("lastSave", now.toString());
-        return now;
-      });
+      localStorage.setItem("lastSave", now.toString());
+      setLastSave(Date.now());
     };
     const interval = setInterval(save, 100);
     return () => clearInterval(interval);
@@ -94,6 +87,7 @@ const GameStateSaver = () => {
     bugFixersEnabled,
     soldCompanies,
     gameProfitability,
+    lastSave,
   ]);
   return false;
 };
