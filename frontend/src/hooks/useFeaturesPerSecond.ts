@@ -4,6 +4,9 @@ const useFeaturesPerSecond = () => {
   const featureDevelopers = useAppSelector(
     (state) => state.featureDevelopers.value,
   );
+  const featureDeveloperProductivity = useAppSelector(
+    (state) => state.featureDeveloperProductivity.value,
+  );
   const isFeatureDevelopersEnabled = useAppSelector(
     (state) => state.featureDevelopers.enabled,
   );
@@ -15,7 +18,10 @@ const useFeaturesPerSecond = () => {
     isFeatureDevelopersEnabled &&
     featureDevelopers > 0
   ) {
-    return Math.pow(featureDevelopers, 0.25);
+    return (
+      Math.pow(featureDevelopers, 0.25) *
+      Math.pow(1.1, featureDeveloperProductivity)
+    );
   }
   return 0;
 };

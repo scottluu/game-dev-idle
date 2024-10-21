@@ -1,5 +1,13 @@
-import { Box, Dropdown, Menu, MenuButton, MenuItem } from "@mui/joy";
-import { AppBar, Toolbar, Typography } from "@mui/material";
+import {
+  Box,
+  Dropdown,
+  Menu,
+  MenuButton,
+  MenuItem,
+  Sheet,
+  Stack,
+} from "@mui/joy";
+import { Typography } from "@mui/joy";
 import { useState } from "react";
 import GoogleIcon from "@mui/icons-material/Google";
 import useEmail from "../hooks/UseEmail";
@@ -34,9 +42,9 @@ const MyAppBar = () => {
 
   return (
     <Box sx={{ flexGrow: 1, minWidth: "70vw" }}>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h3" component="div">
+      <Sheet variant={"solid"} style={{ padding: "1rem" }}>
+        <Stack direction="row" spacing={4} sx={{ alignItems: "center" }}>
+          <Typography level="h2" component="div">
             Game Dev Idle
           </Typography>
           <Dropdown
@@ -49,8 +57,8 @@ const MyAppBar = () => {
               <Typography>{email}</Typography>
             )}
           </Dropdown>
-        </Toolbar>
-      </AppBar>
+        </Stack>
+      </Sheet>
     </Box>
   );
 };

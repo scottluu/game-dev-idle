@@ -3,24 +3,24 @@ import { NumberState } from "../types";
 import { getNumberWithDefault } from "../utils";
 
 const initialState: NumberState = {
-  value: getNumberWithDefault("bugFixerProductivity"),
+  value: getNumberWithDefault("bugsPerFeature"),
 };
 
-const bugFixerProductivitySlice = createSlice({
-  name: "bugFixerProductivity",
+const bugsPerFeatureSlice = createSlice({
+  name: "bugsPerFeature",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
     // Use the PayloadAction type to declare the contents of `action.payload`
-    incrementBugFixerProductivity: (state, action: PayloadAction<number>) => {
+    incrementBugsPerFeature: (state, action: PayloadAction<number>) => {
       state.value += action.payload;
     },
-    resetBugFixerProductivity: (state) => {
+    resetBugsPerFeature: (state) => {
       state.value = 0;
     },
   },
 });
 
-export const { incrementBugFixerProductivity, resetBugFixerProductivity } =
-  bugFixerProductivitySlice.actions;
-export const bugFixerProductivityReducer = bugFixerProductivitySlice.reducer;
+export const { incrementBugsPerFeature, resetBugsPerFeature } =
+  bugsPerFeatureSlice.actions;
+export const bugsPerFeatureReducer = bugsPerFeatureSlice.reducer;

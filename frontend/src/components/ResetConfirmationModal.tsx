@@ -1,5 +1,5 @@
 import { Checkbox, Modal, ModalDialog } from "@mui/joy";
-import { Button, Typography } from "@mui/material";
+import { Button, Typography } from "@mui/joy";
 import { useState } from "react";
 
 type ResetConfirmationModalProps = {

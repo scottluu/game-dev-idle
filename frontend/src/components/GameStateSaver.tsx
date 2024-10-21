@@ -21,8 +21,24 @@ const GameStateSaver = () => {
   const featureDevelopersEnabled = useAppSelector(
     (state) => state.featureDevelopers.enabled,
   );
+  const featureDeveloperCost = useAppSelector(
+    (state) => state.featureDeveloperCost.value,
+  );
+  const featureDeveloperProductivity = useAppSelector(
+    (state) => state.featureDeveloperProductivity.value,
+  );
   const bugFixers = useAppSelector((state) => state.bugFixers.value);
   const bugFixersEnabled = useAppSelector((state) => state.bugFixers.enabled);
+  const bugFixerProductivity = useAppSelector(
+    (state) => state.bugFixerProductivity.value,
+  );
+  const bugFixerCost = useAppSelector((state) => state.bugFixerCost.value);
+
+  const gameProfitability = useAppSelector(
+    (state) => state.gameProfitability.value,
+  );
+  const soldCompanies = useAppSelector((state) => state.soldCompanies.value);
+  const bugsPerFeature = useAppSelector((state) => state.bugsPerFeature.value);
 
   useEffect(() => {
     const save = () => {
@@ -34,12 +50,28 @@ const GameStateSaver = () => {
         localStorage.setItem("money", money.toString());
         localStorage.setItem("bugFixers", bugFixers.toString());
         localStorage.setItem("bugFixers.enabled", bugFixersEnabled.toString());
+        localStorage.setItem(
+          "bugFixerProductivity",
+          bugFixerProductivity.toString(),
+        );
         localStorage.setItem("featureDevelopers", featureDevelopers.toString());
         localStorage.setItem(
           "featureDevelopers.enabled",
           featureDevelopersEnabled.toString(),
         );
+        localStorage.setItem(
+          "featureDevelopersCost",
+          featureDeveloperCost.toString(),
+        );
+        localStorage.setItem(
+          "featureDeveloperProductivity",
+          featureDeveloperProductivity.toString(),
+        );
         localStorage.setItem("releasedGames", JSON.stringify(releasedGames));
+        localStorage.setItem("soldCompanies", JSON.stringify(soldCompanies));
+        localStorage.setItem("gameProfitability", gameProfitability.toString());
+        localStorage.setItem("bugFixerCost", bugFixerCost.toString());
+        localStorage.setItem("bugsPerFeature", bugsPerFeature.toString());
         localStorage.setItem("lastSave", now.toString());
         return now;
       });
@@ -55,6 +87,8 @@ const GameStateSaver = () => {
     releasedGames,
     featureDevelopersEnabled,
     bugFixersEnabled,
+    soldCompanies,
+    gameProfitability,
   ]);
   return false;
 };

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import MyPaper from "./MyPaper";
-import { IconButton, Stack, Switch, Tooltip, Typography } from "@mui/material";
+import { IconButton, Stack, Switch, Tooltip, Typography } from "@mui/joy";
 import { Add, Remove } from "@mui/icons-material";
 import useAppSelector from "../hooks/useAppSelector";
 import { incrementBugFixers, toggleBugFixers } from "../slices/bugFixersSlice";
@@ -16,10 +16,12 @@ const computeCost = (
   currentAmount: number,
   hireAmount: number,
   exponent: number,
+  exponent_reducer: number,
 ) => {
   let result = 0;
   for (let i = 0; i < hireAmount; i++) {
-    result += Math.pow(currentAmount + i, exponent);
+    result +=
+      Math.pow(currentAmount + i, exponent) * Math.pow(0.9, exponent_reducer);
   }
   return Math.round(result);
 };
@@ -28,17 +30,19 @@ const computeRefund = (
   currentAmount: number,
   fireAmount: number,
   exponent: number,
+  exponent_reducer: number,
 ) => {
   if (currentAmount === 0) return 1;
   let result = 0;
   for (let i = 1; i < fireAmount + 1; i++) {
-    result += Math.pow(currentAmount - i, exponent);
+    result +=
+      Math.pow(currentAmount - i, exponent) * Math.pow(0.9, exponent_reducer);
   }
   return Math.round(result);
 };
 
 const BUG_FIXER_MULTIPLIER = 2;
-const FEATURE_DEVELOPER_MULTIPLIER = 4;
+const FEATURE_DEVELOPER_MULTIPLIER = 3;
 
 const EmployeesTab = () => {
   const [hireAmount, setHireAmount] = useState(1);
@@ -55,24 +59,36 @@ const EmployeesTab = () => {
   const featureDevelopers = useAppSelector(
     (state) => state.featureDevelopers.value,
   );
+  const featureDeveloperCost = useAppSelector(
+    (state) => state.featureDeveloperCost.value,
+  );
   const bugFixers = useAppSelector((state) => state.bugFixers.value);
+  const bugFixerCost = useAppSelector((state) => state.bugFixerCost.value);
 
-  const bugFixerCost = computeCost(bugFixers, hireAmount, BUG_FIXER_MULTIPLIER);
+  const bugFixerCostAmount = computeCost(
+    bugFixers,
+    hireAmount,
+    BUG_FIXER_MULTIPLIER,
+    bugFixerCost,
+  );
   const bugFixersRefund = computeRefund(
     bugFixers,
     hireAmount,
     BUG_FIXER_MULTIPLIER,
+    bugFixerCost,
   );
 
-  const featureDeveloperCost = computeCost(
+  const featureDeveloperCostAmount = computeCost(
     featureDevelopers,
     hireAmount,
     FEATURE_DEVELOPER_MULTIPLIER,
+    featureDeveloperCost,
   );
   const featureDevelopersRefund = computeRefund(
     featureDevelopers,
     hireAmount,
     FEATURE_DEVELOPER_MULTIPLIER,
+    featureDeveloperCost,
   );
 
   return (
@@ -118,7 +134,7 @@ const EmployeesTab = () => {
                   disabled={bugFixers < hireAmount}
                   onClick={() => {
                     dispatch(incrementBugFixers(-1 * hireAmount));
-                    dispatch(incrementMoney(-1 * bugFixerCost));
+                    dispatch(incrementMoney(-1 * bugFixerCostAmount));
                   }}
                 >
                   <Remove />
@@ -129,13 +145,13 @@ const EmployeesTab = () => {
           <Typography>Bug fixers: {bugFixers}</Typography>
           <div>
             <Tooltip
-              title={`-${bugFixerCost} Money, +${hireAmount} Bug fixers${money < bugFixerCost ? " | Not enough money" : ""}`}
+              title={`-${bugFixerCostAmount} Money, +${hireAmount} Bug fixers${money < bugFixerCostAmount ? " | Not enough money" : ""}`}
             >
               <div>
                 <IconButton
-                  disabled={money < bugFixerCost}
+                  disabled={money < bugFixerCostAmount}
                   onClick={() => {
-                    dispatch(incrementMoney(-1 * bugFixerCost));
+                    dispatch(incrementMoney(-1 * bugFixerCostAmount));
                     dispatch(incrementBugFixers(hireAmount));
                   }}
                 >
@@ -183,13 +199,13 @@ const EmployeesTab = () => {
           <Typography>Feature Developers: {featureDevelopers}</Typography>
           <div>
             <Tooltip
-              title={`-${featureDeveloperCost} Money, +${hireAmount} Feature Developers${money < featureDeveloperCost ? " | Not enough money" : ""}`}
+              title={`-${featureDeveloperCostAmount} Money, +${hireAmount} Feature Developers${money < featureDeveloperCostAmount ? " | Not enough money" : ""}`}
             >
               <div>
                 <IconButton
-                  disabled={money < featureDeveloperCost}
+                  disabled={money < featureDeveloperCostAmount}
                   onClick={() => {
-                    dispatch(incrementMoney(-1 * featureDeveloperCost));
+                    dispatch(incrementMoney(-1 * featureDeveloperCostAmount));
                     dispatch(incrementFeatureDevelopers(hireAmount));
                   }}
                 >

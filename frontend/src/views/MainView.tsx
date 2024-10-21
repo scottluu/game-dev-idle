@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Stack, Tab, Tabs, Typography } from "@mui/material";
+import { Stack, Tab, TabList, TabPanel, Tabs, Typography } from "@mui/joy";
 import MyPaper from "../components/MyPaper";
 import EmployeesTab from "../components/EmployeesTab";
 import MainTab from "../components/MainTab";
@@ -38,13 +38,13 @@ const MainView = () => {
       <MyPaper>
         <Stack direction="column" spacing={2}>
           <Stack direction="row" spacing={4} sx={{ alignItems: "baseline" }}>
-            <Typography variant={"h1"}>${Math.round(money)}</Typography>
+            <Typography level={"h1"}>${Math.round(money)}</Typography>
             <Typography>
               {moneyPerSecond > 0 ? `($${moneyPerSecond}/s)` : null}
             </Typography>
           </Stack>
           <Stack direction="row" spacing={4} sx={{ alignItems: "baseline" }}>
-            <Typography variant={"h3"}>
+            <Typography level={"h3"}>
               Features: {Math.round(features)}
             </Typography>
             <Typography>
@@ -54,7 +54,7 @@ const MainView = () => {
             </Typography>
           </Stack>
           <Stack direction="row" spacing={4} sx={{ alignItems: "baseline" }}>
-            <Typography variant={"h3"}>Bugs: {Math.round(bugs)}</Typography>
+            <Typography level={"h3"}>Bugs: {Math.round(bugs)}</Typography>
             <Typography>
               {bugFixers + featureDevelopers > 0
                 ? `(${roundPerSecond(bugsPerSecond)}/s)`
@@ -63,24 +63,27 @@ const MainView = () => {
           </Stack>
         </Stack>
       </MyPaper>
-      <Tabs value={tabIndex} onChange={(_event, value) => setTabIndex(value)}>
-        <Tab label="Main" />
-        <Tab label="Employees" disabled={releasedGames.length === 0} />
-        <Tab label="Released Games" disabled={releasedGames.length === 0} />
-        <Tab label="Reset" />
+      <Tabs defaultValue={0}>
+        <TabList>
+          <Tab>Main</Tab>
+          <Tab disabled={releasedGames.length === 0}>Employees</Tab>
+          <Tab disabled={releasedGames.length === 0}>Released Games</Tab>
+          <Tab>Reset</Tab>
+        </TabList>
+
+        <TabPanel value={0}>
+          <MainTab />
+        </TabPanel>
+        <TabPanel value={1}>
+          <EmployeesTab />
+        </TabPanel>
+        <TabPanel value={2}>
+          <ReleasedGamesTab />
+        </TabPanel>
+        <TabPanel value={3}>
+          <ResetTab />
+        </TabPanel>
       </Tabs>
-      <div hidden={tabIndex !== 0}>
-        <MainTab />
-      </div>
-      <div hidden={tabIndex !== 1}>
-        <EmployeesTab />
-      </div>
-      <div hidden={tabIndex !== 2}>
-        <ReleasedGamesTab />
-      </div>
-      <div hidden={tabIndex !== 3}>
-        <ResetTab />
-      </div>
     </>
   );
 };

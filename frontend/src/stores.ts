@@ -5,6 +5,13 @@ import { featuresReducer } from "./slices/featuresSlice";
 import { releasedGamesReducer } from "./slices/releasedGamesSlice";
 import { featureDevelopersReducer } from "./slices/featureDevelopersSlice";
 import { bugFixersReducer } from "./slices/bugFixersSlice";
+import { soldCompaniesReducer } from "./slices/soldCompaniesSlice";
+import { bugFixerCostReducer } from "./slices/bugFixerCostSlice";
+import { bugsPerFeatureReducer } from "./slices/bugsPerFeatureSlice";
+import { featureDeveloperCostReducer } from "./slices/featureDeveloperCostSlice";
+import { gameProfitabilityReducer } from "./slices/gameProfitabilitySlice";
+import { bugFixerProductivityReducer } from "./slices/bugFixerProductivitySlice";
+import { featureDeveloperProductivityReducer } from "./slices/featureDeveloperProductivitySlice";
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +21,13 @@ export const store = configureStore({
     releasedGames: releasedGamesReducer,
     featureDevelopers: featureDevelopersReducer,
     bugFixers: bugFixersReducer,
+    soldCompanies: soldCompaniesReducer,
+    bugFixerCost: bugFixerCostReducer,
+    bugFixerProductivity: bugFixerProductivityReducer,
+    bugsPerFeature: bugsPerFeatureReducer,
+    featureDeveloperCost: featureDeveloperCostReducer,
+    featureDeveloperProductivity: featureDeveloperProductivityReducer,
+    gameProfitability: gameProfitabilityReducer,
   },
 });
 

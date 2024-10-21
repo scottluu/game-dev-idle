@@ -18,10 +18,15 @@ const featureDeveloperProductivitySlice = createSlice({
     ) => {
       state.value += action.payload;
     },
+    resetFeatureDeveloperProductivity: (state) => {
+      state.value = 0;
+    },
   },
 });
 
-export const { incrementFeatureDeveloperProductivity } =
-  featureDeveloperProductivitySlice.actions;
+export const {
+  incrementFeatureDeveloperProductivity,
+  resetFeatureDeveloperProductivity,
+} = featureDeveloperProductivitySlice.actions;
 export const featureDeveloperProductivityReducer =
   featureDeveloperProductivitySlice.reducer;

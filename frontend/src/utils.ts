@@ -14,9 +14,14 @@ export const getBooleanWithDefault = (
     : defaultVal;
 };
 
-export const computeMoneyPerSecond = (gameStat: GameStats) => {
+export const computeMoneyPerSecond = (
+  gameStat: GameStats,
+  gameProfitability: number,
+) => {
   return (
-    Math.pow(gameStat.features, 1.15) / 100 - Math.pow(gameStat.bugs, 1.5) / 100
+    (Math.pow(gameStat.features, 1.15) / 100 -
+      Math.pow(gameStat.bugs, 1.5) / 100) *
+    Math.pow(1.1, gameProfitability)
   );
 };
 

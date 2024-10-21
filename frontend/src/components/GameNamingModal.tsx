@@ -1,5 +1,5 @@
 import { Input, Modal, ModalDialog } from "@mui/joy";
-import { Button, Typography } from "@mui/material";
+import { Button, Typography } from "@mui/joy";
 
 type GameNamingModal = {
   open: boolean;

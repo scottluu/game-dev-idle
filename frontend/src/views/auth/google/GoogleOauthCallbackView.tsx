@@ -1,5 +1,5 @@
 import { useSearchParams } from "react-router-dom";
-import { Typography } from "@mui/material";
+import { Typography } from "@mui/joy";
 import { useEffect, useRef } from "react";
 import useEmail from "../../../hooks/UseEmail";
 import useIsLoggedIn from "../../../hooks/UseIsLoggedIn";
