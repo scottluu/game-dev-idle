@@ -7,6 +7,7 @@ import {
 } from "../types";
 import useSpecializationPoints from "../hooks/useSpecializationPoints";
 import { Add, Remove } from "@mui/icons-material";
+import useAppSelector from "../hooks/useAppSelector";
 
 type CompanyNamingModal = {
   open: boolean;
@@ -27,12 +28,15 @@ type RowProps = {
   onRemove: () => void;
   onAdd: () => void;
   cannotAdd: boolean;
+  currentLevel: number;
 };
 
 const Row = (props: RowProps) => {
   return (
     <Stack direction="row" spacing={2} sx={{ alignItems: "stretch" }}>
-      <Typography>{props.text}</Typography>
+      <Typography>
+        {props.text} (Current Level {props.currentLevel})
+      </Typography>
       <IconButton disabled={props.rowPoints === 0} onClick={props.onRemove}>
         <Remove />
       </IconButton>
@@ -60,6 +64,21 @@ const SpecializationPointAssignmentSection = (
     props.specializationPointAssignment,
   );
 
+  const featureDeveloperCost = useAppSelector(
+    (state) => state.featureDeveloperCost.value,
+  );
+  const featureDeveloperProductivity = useAppSelector(
+    (state) => state.featureDeveloperProductivity.value,
+  );
+  const bugFixerCost = useAppSelector((state) => state.bugFixerCost.value);
+  const bugFixerProductivity = useAppSelector(
+    (state) => state.bugFixerProductivity.value,
+  );
+  const gameProfitability = useAppSelector(
+    (state) => state.gameProfitability.value,
+  );
+  const bugsPerFeature = useAppSelector((state) => state.bugsPerFeature.value);
+
   const cannotSpendMore = spentSpecializationPoints === specializationPoints;
   const bugFixerCostRow = (
     <Row
@@ -76,6 +95,7 @@ const SpecializationPointAssignmentSection = (
         })
       }
       cannotAdd={cannotSpendMore}
+      currentLevel={bugFixerCost}
     />
   );
   const bugFixerProductivityRow = (
@@ -99,6 +119,7 @@ const SpecializationPointAssignmentSection = (
         })
       }
       cannotAdd={cannotSpendMore}
+      currentLevel={bugFixerProductivity}
     />
   );
   const featureDeveloperCostRow = (
@@ -122,6 +143,7 @@ const SpecializationPointAssignmentSection = (
         })
       }
       cannotAdd={cannotSpendMore}
+      currentLevel={featureDeveloperCost}
     />
   );
   const featureDeveloperProductivityRow = (
@@ -149,6 +171,7 @@ const SpecializationPointAssignmentSection = (
         })
       }
       cannotAdd={cannotSpendMore}
+      currentLevel={featureDeveloperProductivity}
     />
   );
   const bugsPerFeatureRow = (
@@ -166,6 +189,7 @@ const SpecializationPointAssignmentSection = (
         })
       }
       cannotAdd={cannotSpendMore}
+      currentLevel={bugsPerFeature}
     />
   );
   const gameProfitabilityRow = (
@@ -189,6 +213,7 @@ const SpecializationPointAssignmentSection = (
         })
       }
       cannotAdd={cannotSpendMore}
+      currentLevel={gameProfitability}
     />
   );
 

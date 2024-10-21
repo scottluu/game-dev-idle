@@ -134,7 +134,7 @@ const EmployeesTab = () => {
                   disabled={bugFixers < hireAmount}
                   onClick={() => {
                     dispatch(incrementBugFixers(-1 * hireAmount));
-                    dispatch(incrementMoney(-1 * bugFixerCostAmount));
+                    dispatch(incrementMoney(bugFixersRefund));
                   }}
                 >
                   <Remove />

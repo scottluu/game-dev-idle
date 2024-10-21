@@ -53,6 +53,7 @@ const MainTab = () => {
   const gameProfitability = useAppSelector(
     (state) => state.gameProfitability.value,
   );
+  const bugsPerFeature = useAppSelector((state) => state.bugsPerFeature.value);
   const dispatch = useAppDispatch();
 
   const releaseGame = () => {
@@ -121,7 +122,7 @@ const MainTab = () => {
       <MyPaper>
         <Stack direction="row" spacing={4}>
           <Tooltip
-            title={`-1 Money, +1 Feature${money === 0 ? " | Not enough money" : bugs > features ? " | Too many bugs" : ""}`}
+            title={`-1 Money, +1 Feature, +${Math.round(features * Math.pow(0.9, bugsPerFeature))} Bugs${money === 0 ? " | Not enough money" : bugs > features ? " | Too many bugs" : ""}`}
           >
             <span>
               <Button
@@ -129,7 +130,9 @@ const MainTab = () => {
                 onClick={() => {
                   dispatch(incrementMoney(-1));
                   dispatch(incrementFeatures(1));
-                  dispatch(incrementBugs(features));
+                  dispatch(
+                    incrementBugs(features * Math.pow(0.9, bugsPerFeature)),
+                  );
                 }}
                 disabled={money < 1 || bugs > features}
               >
