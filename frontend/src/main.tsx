@@ -10,8 +10,8 @@ import { CssVarsProvider, StyledEngineProvider } from "@mui/joy";
 import { extendTheme } from "@mui/joy/styles";
 
 const router = createBrowserRouter([
-  { path: "/", element: <MainView /> },
-  { path: "/auth/google/callback", element: <GoogleOauthCallbackView /> },
+  { path: "/", Component: MainView },
+  { path: "/auth/google/callback", Component: GoogleOauthCallbackView },
 ]);
 
 const theme = extendTheme({ cssVarPrefix: "demo" });

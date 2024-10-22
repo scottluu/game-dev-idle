@@ -30,6 +30,7 @@ const MainView = () => {
   const featuresPerSecond = useFeaturesPerSecond();
   const bugsPerSecond = useBugsPerSecond();
   const { lastSave } = useLastSave();
+  const [hireAmount, setHireAmount] = useState(1);
 
   if (lastSave + 30000 < Date.now()) {
     return <OfflineLoader />;
@@ -71,8 +72,8 @@ const MainView = () => {
       <Tabs defaultValue={0}>
         <TabList>
           <Tab>Main</Tab>
-          <Tab disabled={releasedGames.length === 0}>Employees</Tab>
-          <Tab disabled={releasedGames.length === 0}>Released Games</Tab>
+          <Tab>Employees</Tab>
+          <Tab>Released Games</Tab>
           <Tab>Reset</Tab>
         </TabList>
 
@@ -80,10 +81,21 @@ const MainView = () => {
           <MainTab />
         </TabPanel>
         <TabPanel value={1}>
-          <EmployeesTab />
+          {releasedGames.length > 0 ? (
+            <EmployeesTab
+              hireAmount={hireAmount}
+              setHireAmount={setHireAmount}
+            />
+          ) : (
+            <Typography>Release one game first!</Typography>
+          )}
         </TabPanel>
         <TabPanel value={2}>
-          <ReleasedGamesTab />
+          {releasedGames.length > 0 ? (
+            <ReleasedGamesTab />
+          ) : (
+            <Typography>Release one game first!</Typography>
+          )}
         </TabPanel>
         <TabPanel value={3}>
           <ResetTab />

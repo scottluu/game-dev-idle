@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { IconButton, Stack, Switch, Tooltip, Typography } from "@mui/joy";
 import { Add, Remove } from "@mui/icons-material";
 import useAppSelector from "../hooks/useAppSelector";
@@ -43,9 +42,12 @@ const computeRefund = (
 const BUG_FIXER_MULTIPLIER = 2;
 const FEATURE_DEVELOPER_MULTIPLIER = 3;
 
-const EmployeesTab = () => {
-  const [hireAmount, setHireAmount] = useState(1);
+type Props = {
+  hireAmount: number;
+  setHireAmount: (val: number) => void;
+};
 
+const EmployeesTab = ({ hireAmount, setHireAmount }: Props) => {
   const dispatch = useAppDispatch();
 
   const money = useAppSelector((state) => state.money.value);
