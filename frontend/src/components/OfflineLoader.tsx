@@ -15,6 +15,7 @@ const OfflineLoader = () => {
   const moneyPerSecond = useMoneyPerSecond();
   const { lastSave } = useLastSave();
   const bugs = useAppSelector((state) => state.bugs.value);
+  const money = useAppSelector((state) => state.money.value);
   const features = useAppSelector((state) => state.features.value);
   const isBugFixersEnabled = useAppSelector((state) => state.bugFixers.enabled);
   const bugFixers = useAppSelector((state) => state.bugFixers.value);
@@ -57,6 +58,7 @@ const OfflineLoader = () => {
           isFeatureDevelopersEnabled,
           featureDevelopers,
           bugsPerFeature,
+          money,
         );
       const newFeatures =
         oldFeatures +
@@ -66,6 +68,7 @@ const OfflineLoader = () => {
           isFeatureDevelopersEnabled,
           featureDevelopers,
           featureDeveloperProductivity,
+          money,
         );
       oldBugs = newBugs;
       oldFeatures = newFeatures;
