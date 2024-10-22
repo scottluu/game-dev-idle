@@ -13,6 +13,7 @@ const useFeaturesPerSecond = () => {
   );
   const bugs = useAppSelector((state) => state.bugs.value);
   const features = useAppSelector((state) => state.features.value);
+  const money = useAppSelector((state) => state.money.value);
 
   return computeFeaturesPerSecond(
     bugs,
@@ -20,6 +21,7 @@ const useFeaturesPerSecond = () => {
     isFeatureDevelopersEnabled,
     featureDevelopers,
     featureDeveloperProductivity,
+    money,
   );
 };
 

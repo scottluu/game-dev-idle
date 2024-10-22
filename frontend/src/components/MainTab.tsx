@@ -10,7 +10,11 @@ import {
 } from "../slices/releasedGamesSlice";
 import useAppDispatch from "../hooks/useAppDispatch";
 import GameNamingModal from "./GameNamingModal";
-import { computeMoneyPerSecond, roundMoney, roundPerSecond } from "../utils";
+import {
+  computeMoneyPerSecondForSingleGame,
+  roundMoney,
+  roundPerSecond,
+} from "../utils";
 import CompanyNamingModal from "./CompanyNamingModal";
 import { appendCompany } from "../slices/soldCompaniesSlice";
 import { resetFeatureDevelopers } from "../slices/featureDevelopersSlice";
@@ -26,6 +30,8 @@ import {
   SpecializationPointAssignment,
 } from "../types";
 import useSpecializationPoints from "../hooks/useSpecializationPoints";
+import { incrementClickingStrength } from "../slices/clickingStrengthSlice";
+import { resetOffice } from "../slices/officeSlice";
 
 const MainTab = () => {
   const specializationPoints = useSpecializationPoints();
@@ -89,6 +95,8 @@ const MainTab = () => {
       incrementGameProfitability(
         specializationPointAssignment.gameProfitability,
       ),
+      incrementClickingStrength(specializationPointAssignment.clickingStrength),
+      resetOffice(),
     ];
     actions.forEach((action) => dispatch(action));
     setCompanyName("");
@@ -108,7 +116,10 @@ const MainTab = () => {
     spentSpecializationPoints === specializationPoints;
 
   const additionalMoneyPerSecond = roundMoney(
-    computeMoneyPerSecond({ bugs, features, name: "" }, gameProfitability),
+    computeMoneyPerSecondForSingleGame(
+      { bugs, features, name: "" },
+      gameProfitability,
+    ),
   );
   const perClick = Math.pow(1.3, clickingStrength);
   return (

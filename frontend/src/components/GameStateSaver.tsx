@@ -37,6 +37,7 @@ const GameStateSaver = () => {
   );
   const soldCompanies = useAppSelector((state) => state.soldCompanies.value);
   const bugsPerFeature = useAppSelector((state) => state.bugsPerFeature.value);
+  const office = useAppSelector((state) => state.office.value);
 
   useEffect(() => {
     const save = () => {
@@ -70,6 +71,7 @@ const GameStateSaver = () => {
       localStorage.setItem("bugFixerCost", bugFixerCost.toString());
       localStorage.setItem("bugsPerFeature", bugsPerFeature.toString());
       localStorage.setItem("clickingStrength", clickingStrength.toString());
+      localStorage.setItem("office", office.toString());
 
       localStorage.setItem("lastSave", now.toString());
       setLastSave(Date.now());

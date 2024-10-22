@@ -1,6 +1,6 @@
 import useAppSelector from "../hooks/useAppSelector";
 import { Table } from "@mui/joy";
-import { computeMoneyPerSecond, roundMoney } from "../utils";
+import { computeMoneyPerSecondForSingleGame, roundMoney } from "../utils";
 
 const ReleasedGamesTab = () => {
   const releasedGames = useAppSelector((state) => state.releasedGames.value);
@@ -30,7 +30,10 @@ const ReleasedGamesTab = () => {
               <td>{Math.round(releasedGame.bugs)}</td>
               <td>
                 {roundMoney(
-                  computeMoneyPerSecond(releasedGame, gameProfitability),
+                  computeMoneyPerSecondForSingleGame(
+                    releasedGame,
+                    gameProfitability,
+                  ),
                 )}
               </td>
             </tr>

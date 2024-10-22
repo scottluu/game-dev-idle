@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Stack, Tab, TabList, TabPanel, Tabs, Typography } from "@mui/joy";
 import MyPaper from "../components/MyPaper";
-import EmployeesTab from "../components/EmployeesTab";
+import CompanyManagementTab from "../components/CompanyManagementTab";
 import MainTab from "../components/MainTab";
 import MyAppBar from "../components/MyAppBar";
 import "./MainView.css";
@@ -72,7 +72,7 @@ const MainView = () => {
       <Tabs defaultValue={0}>
         <TabList>
           <Tab>Main</Tab>
-          <Tab>Employees</Tab>
+          <Tab>Company Management</Tab>
           <Tab>Released Games</Tab>
           <Tab>Reset</Tab>
         </TabList>
@@ -82,7 +82,7 @@ const MainView = () => {
         </TabPanel>
         <TabPanel value={1}>
           {releasedGames.length > 0 ? (
-            <EmployeesTab
+            <CompanyManagementTab
               hireAmount={hireAmount}
               setHireAmount={setHireAmount}
             />

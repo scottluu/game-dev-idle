@@ -14,7 +14,7 @@ export const getBooleanWithDefault = (
     : defaultVal;
 };
 
-export const computeMoneyPerSecond = (
+export const computeMoneyPerSecondForSingleGame = (
   gameStat: GameStats,
   gameProfitability: number,
 ) => {
@@ -23,6 +23,28 @@ export const computeMoneyPerSecond = (
       Math.pow(gameStat.bugs, 1.5) / 100) *
     Math.pow(1.1, gameProfitability)
   );
+};
+
+export const computeMoneyPerSecond = (
+  gameStats: GameStats[],
+  gameProfitability: number,
+  office: number,
+) => {
+  let moneyPerSecondRaw = -1 * computeOfficeCostPerSecond(office);
+  if (gameStats.length > 0) {
+    moneyPerSecondRaw += gameStats
+      .map((value) =>
+        computeMoneyPerSecondForSingleGame(value, gameProfitability),
+      )
+      .reduce((previousValue, currentValue) => previousValue + currentValue);
+  }
+
+  const moneyPerSecondAsCents = moneyPerSecondRaw * 100;
+
+  if (moneyPerSecondAsCents < 1000)
+    return Math.round(moneyPerSecondAsCents) / 100;
+
+  return Math.round(moneyPerSecondRaw);
 };
 
 export const roundMoney = (value: number) => {
@@ -46,7 +68,9 @@ export const computeBugsPerSecond = (
   isFeatureDevelopersEnabled: boolean,
   featureDevelopers: number,
   bugsPerFeature: number,
+  money: number,
 ) => {
+  if (money <= 0) return 0;
   let bugsDelta = 0;
   if (isBugFixersEnabled) {
     bugsDelta -= Math.pow(bugFixers, 0.6) * Math.pow(1.1, bugFixerProductivity);
@@ -67,11 +91,13 @@ export const computeFeaturesPerSecond = (
   isFeatureDevelopersEnabled: boolean,
   featureDevelopers: number,
   featureDeveloperProductivity: number,
+  money: number,
 ) => {
   if (
     (bugs === 0 || bugs < features) &&
     isFeatureDevelopersEnabled &&
-    featureDevelopers > 0
+    featureDevelopers > 0 &&
+    money > 0
   ) {
     return (
       Math.pow(featureDevelopers, 0.25) *
@@ -79,4 +105,8 @@ export const computeFeaturesPerSecond = (
     );
   }
   return 0;
+};
+
+export const computeOfficeCostPerSecond = (office: number) => {
+  return roundPerSecond(Math.pow(1.6, office));
 };
