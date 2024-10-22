@@ -1,3 +1,5 @@
+import { sum } from "./utils";
+
 export type GameStats = {
   name: string;
   bugs: number;
@@ -26,7 +28,7 @@ export type SpecializationPointAssignment = {
 export const computeSpentSpecPoints = (
   value: SpecializationPointAssignment,
 ) => {
-  return [
+  return sum([
     value.bugFixerProductivity,
     value.bugFixerCost,
     value.featureDeveloperProductivity,
@@ -34,5 +36,5 @@ export const computeSpentSpecPoints = (
     value.gameProfitability,
     value.bugsPerFeature,
     value.clickingStrength,
-  ].reduce((previousValue, currentValue) => previousValue + currentValue);
+  ]);
 };

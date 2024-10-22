@@ -32,11 +32,11 @@ export const computeMoneyPerSecond = (
 ) => {
   let moneyPerSecondRaw = -1 * computeOfficeCostPerSecond(office);
   if (gameStats.length > 0) {
-    moneyPerSecondRaw += gameStats
-      .map((value) =>
+    moneyPerSecondRaw += sum(
+      gameStats.map((value) =>
         computeMoneyPerSecondForSingleGame(value, gameProfitability),
-      )
-      .reduce((previousValue, currentValue) => previousValue + currentValue);
+      ),
+    );
   }
 
   const moneyPerSecondAsCents = moneyPerSecondRaw * 100;
@@ -110,4 +110,29 @@ export const computeFeaturesPerSecond = (
 export const computeOfficeCostPerSecond = (office: number) => {
   if (office === 0) return 0;
   return roundPerSecond(Math.pow(1.6, office));
+};
+
+export const sum = (numbers: number[]) => {
+  if (numbers.length === 0) return 0;
+  if (numbers.length === 1) return numbers[0];
+  return numbers.reduce(
+    (previousValue, currentValue) => previousValue + currentValue,
+  );
+};
+
+export const computeMoneyRequirement = (specializationPoints: number) => {
+  return Math.pow(2, specializationPoints);
+};
+export const computeMoneyPerSecondRequirement = (
+  specializationPoints: number,
+) => {
+  return Math.pow(1.5, specializationPoints);
+};
+export const computeBugFixersRequirement = (specializationPoints: number) => {
+  return Math.round(Math.pow(1.5, specializationPoints));
+};
+export const computeFeatureDevelopersRequirement = (
+  specializationPoints: number,
+) => {
+  return Math.round(Math.pow(1.05, specializationPoints));
 };

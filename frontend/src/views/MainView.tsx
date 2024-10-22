@@ -16,6 +16,7 @@ import ResetTab from "../components/ResetTab";
 import { roundPerSecond } from "../utils";
 import useLastSave from "../hooks/UseLastSave";
 import OfflineLoader from "../components/OfflineLoader";
+import useLocalStorage from "../hooks/UseLocalStorage";
 
 const MainView = () => {
   const money = useAppSelector((state) => state.money.value);
@@ -30,10 +31,19 @@ const MainView = () => {
   const featuresPerSecond = useFeaturesPerSecond();
   const bugsPerSecond = useBugsPerSecond();
   const { lastSave } = useLastSave();
+  const { value: lastLoad, setter: setLastLoad } =
+    useLocalStorage<number>("lastLoad");
   const [hireAmount, setHireAmount] = useState(1);
 
   if (lastSave + 30000 < Date.now()) {
     return <OfflineLoader />;
+  }
+  if (lastLoad === null) {
+    setLastLoad(Date.now());
+  } else if (lastLoad + 1000 * 60 * 30 < Date.now()) {
+    setLastLoad(Date.now());
+    location.reload();
+    return <Typography>Refreshing...</Typography>;
   }
 
   return (

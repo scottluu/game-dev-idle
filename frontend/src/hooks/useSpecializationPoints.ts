@@ -1,5 +1,12 @@
 import useMoneyPerSecond from "./useMoneyPerSecond";
 import useAppSelector from "./useAppSelector";
+import useSpentSpecializationPoints from "./useSpentSpecializationPoints";
+import {
+  computeBugFixersRequirement,
+  computeFeatureDevelopersRequirement,
+  computeMoneyPerSecondRequirement,
+  computeMoneyRequirement,
+} from "../utils";
 
 const useSpecializationPoints = () => {
   const moneyPerSecond = useMoneyPerSecond();
@@ -8,20 +15,18 @@ const useSpecializationPoints = () => {
   const featureDevelopers = useAppSelector(
     (state) => state.featureDevelopers.value,
   );
-  const soldCompanies = useAppSelector((state) => state.soldCompanies.value);
-
-  const moneyPerSecondComponent = Math.pow(moneyPerSecond, 0.6);
-  if (moneyPerSecondComponent < 1) return 0;
-  return Math.max(
-    0,
-    Math.floor(
-      moneyPerSecondComponent / 2 +
-        Math.pow(money, 1 / 5) / 2 +
-        Math.pow(bugFixers + featureDevelopers, 0.5) -
-        2 -
-        Math.pow(1.25, soldCompanies.length),
-    ),
-  );
+  const spentSpecializationPoints = useSpentSpecializationPoints();
+  let i = 0;
+  while (true) {
+    i += 1;
+    const someVal = i + spentSpecializationPoints;
+    if (money < computeMoneyRequirement(someVal)) return i - 1;
+    if (moneyPerSecond < computeMoneyPerSecondRequirement(someVal))
+      return i - 1;
+    if (bugFixers < computeBugFixersRequirement(someVal)) return i - 1;
+    if (featureDevelopers < computeFeatureDevelopersRequirement(someVal))
+      return i - 1;
+  }
 };
 
 export default useSpecializationPoints;

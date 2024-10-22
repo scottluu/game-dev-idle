@@ -11,7 +11,11 @@ import {
 import useAppDispatch from "../hooks/useAppDispatch";
 import GameNamingModal from "./GameNamingModal";
 import {
+  computeBugFixersRequirement,
+  computeFeatureDevelopersRequirement,
   computeMoneyPerSecondForSingleGame,
+  computeMoneyPerSecondRequirement,
+  computeMoneyRequirement,
   roundMoney,
   roundPerSecond,
 } from "../utils";
@@ -32,6 +36,7 @@ import {
 import useSpecializationPoints from "../hooks/useSpecializationPoints";
 import { incrementClickingStrength } from "../slices/clickingStrengthSlice";
 import { resetOffice } from "../slices/officeSlice";
+import useMoneyPerSecond from "../hooks/useMoneyPerSecond";
 
 const MainTab = () => {
   const specializationPoints = useSpecializationPoints();
@@ -52,6 +57,10 @@ const MainTab = () => {
     });
 
   const money = useAppSelector((state) => state.money.value);
+  const bugFixers = useAppSelector((state) => state.bugFixers.value);
+  const featureDevelopers = useAppSelector(
+    (state) => state.featureDevelopers.value,
+  );
   const clickingStrength = useAppSelector(
     (state) => state.clickingStrength.value,
   );
@@ -121,6 +130,7 @@ const MainTab = () => {
       gameProfitability,
     ),
   );
+  const moneyPerSecond = useMoneyPerSecond();
   const perClick = Math.pow(1.3, clickingStrength);
   return (
     <>
@@ -185,22 +195,75 @@ const MainTab = () => {
           </Button>
         </div>
       ) : null}
-      {specializationPoints > 0 ? (
-        <>
-          <Typography>
-            Sell your company to gain {specializationPoints} specialization{" "}
-            points
-          </Typography>
-          <Button
-            variant={"outlined"}
-            onClick={() => {
-              setCompanyNamingModalOpen(true);
-            }}
-          >
-            Sell company
-          </Button>
-        </>
-      ) : null}
+
+      <div>
+        <Typography level={"h4"} style={{ marginTop: "2rem" }}>
+          To get next specialization point
+        </Typography>
+      </div>
+      <div>
+        <Typography
+          color={
+            money < computeMoneyRequirement(specializationPoints + 1)
+              ? "danger"
+              : "success"
+          }
+        >
+          Progress: ${roundMoney(money)} of $
+          {roundMoney(computeMoneyRequirement(specializationPoints + 1))}
+        </Typography>
+      </div>
+      <div>
+        <Typography
+          color={
+            moneyPerSecond <
+            computeMoneyPerSecondRequirement(specializationPoints + 1)
+              ? "danger"
+              : "success"
+          }
+        >
+          Progress: ${moneyPerSecond}/second of $
+          {computeMoneyPerSecondRequirement(specializationPoints + 1)}/second
+        </Typography>
+      </div>
+      <div>
+        <Typography
+          color={
+            bugFixers < computeBugFixersRequirement(specializationPoints + 1)
+              ? "danger"
+              : "success"
+          }
+        >
+          Progress: {bugFixers} of{" "}
+          {computeBugFixersRequirement(specializationPoints + 1)} bug fixers
+        </Typography>
+      </div>
+      <div>
+        <Typography
+          color={
+            featureDevelopers <
+            computeFeatureDevelopersRequirement(specializationPoints + 1)
+              ? "danger"
+              : "success"
+          }
+        >
+          Progress: {featureDevelopers} of{" "}
+          {computeFeatureDevelopersRequirement(specializationPoints + 1)}{" "}
+          feature developers
+        </Typography>
+      </div>
+      <Typography style={{ marginTop: "1rem" }}>
+        Sell your company to gain {specializationPoints} specialization points
+      </Typography>
+      <Button
+        disabled={specializationPoints < 1}
+        variant={"outlined"}
+        onClick={() => {
+          setCompanyNamingModalOpen(true);
+        }}
+      >
+        Sell company
+      </Button>
       <GameNamingModal
         open={gameNamingModalOpen}
         setOpen={setGameNamingModalOpen}
