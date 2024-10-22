@@ -37,6 +37,7 @@ import useSpecializationPoints from "../hooks/useSpecializationPoints";
 import { incrementClickingStrength } from "../slices/clickingStrengthSlice";
 import { resetOffice } from "../slices/officeSlice";
 import useMoneyPerSecond from "../hooks/useMoneyPerSecond";
+import useSpentSpecializationPoints from "../hooks/useSpentSpecializationPoints";
 
 const MainTab = () => {
   const specializationPoints = useSpecializationPoints();
@@ -116,6 +117,7 @@ const MainTab = () => {
   const spentSpecializationPoints = computeSpentSpecPoints(
     specializationPointAssignment,
   );
+  const totalSpentSpecPoints = useSpentSpecializationPoints();
 
   const companyNames = soldCompanies.map((value) => value.name);
   const canSellCompany =
@@ -204,51 +206,75 @@ const MainTab = () => {
       <div>
         <Typography
           color={
-            money < computeMoneyRequirement(specializationPoints + 1)
+            money <
+            computeMoneyRequirement(
+              totalSpentSpecPoints + specializationPoints + 1,
+            )
               ? "danger"
               : "success"
           }
         >
           Progress: ${roundMoney(money)} of $
-          {roundMoney(computeMoneyRequirement(specializationPoints + 1))}
+          {roundMoney(
+            computeMoneyRequirement(
+              totalSpentSpecPoints + specializationPoints + 1,
+            ),
+          )}
         </Typography>
       </div>
       <div>
         <Typography
           color={
             moneyPerSecond <
-            computeMoneyPerSecondRequirement(specializationPoints + 1)
+            computeMoneyPerSecondRequirement(
+              totalSpentSpecPoints + specializationPoints + 1,
+            )
               ? "danger"
               : "success"
           }
         >
           Progress: ${moneyPerSecond}/second of $
-          {computeMoneyPerSecondRequirement(specializationPoints + 1)}/second
+          {roundMoney(
+            computeMoneyPerSecondRequirement(
+              totalSpentSpecPoints + specializationPoints + 1,
+            ),
+          )}
+          /second
         </Typography>
       </div>
       <div>
         <Typography
           color={
-            bugFixers < computeBugFixersRequirement(specializationPoints + 1)
+            bugFixers <
+            computeBugFixersRequirement(
+              totalSpentSpecPoints + specializationPoints + 1,
+            )
               ? "danger"
               : "success"
           }
         >
           Progress: {bugFixers} of{" "}
-          {computeBugFixersRequirement(specializationPoints + 1)} bug fixers
+          {computeBugFixersRequirement(
+            totalSpentSpecPoints + specializationPoints + 1,
+          )}{" "}
+          bug fixers
         </Typography>
       </div>
       <div>
         <Typography
           color={
             featureDevelopers <
-            computeFeatureDevelopersRequirement(specializationPoints + 1)
+            computeFeatureDevelopersRequirement(
+              totalSpentSpecPoints + specializationPoints + 1,
+            )
               ? "danger"
               : "success"
           }
         >
           Progress: {featureDevelopers} of{" "}
-          {computeFeatureDevelopersRequirement(specializationPoints + 1)}{" "}
+          {computeFeatureDevelopersRequirement(
+            totalSpentSpecPoints + specializationPoints + 1,
+          )}{" "}
           feature developers
         </Typography>
       </div>
