@@ -108,5 +108,6 @@ export const computeFeaturesPerSecond = (
 };
 
 export const computeOfficeCostPerSecond = (office: number) => {
+  if (office === 0) return 0;
   return roundPerSecond(Math.pow(1.6, office));
 };
