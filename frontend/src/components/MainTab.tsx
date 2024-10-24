@@ -38,6 +38,13 @@ import { incrementClickingStrength } from "../slices/clickingStrengthSlice";
 import { resetOffice } from "../slices/officeSlice";
 import useMoneyPerSecond from "../hooks/useMoneyPerSecond";
 import useSpentSpecializationPoints from "../hooks/useSpentSpecializationPoints";
+import {
+  enableBugSquasher,
+  enableHelloWorld,
+  enableHelloWorldGame,
+  enableInsectophobia,
+  enableNotADreamJob,
+} from "../slices/achievementsStateSlice";
 
 const MainTab = () => {
   const specializationPoints = useSpecializationPoints();
@@ -62,6 +69,9 @@ const MainTab = () => {
   const featureDevelopers = useAppSelector(
     (state) => state.featureDevelopers.value,
   );
+  const achievementsState = useAppSelector(
+    (state) => state.achievementsState.value,
+  );
   const clickingStrength = useAppSelector(
     (state) => state.clickingStrength.value,
   );
@@ -76,9 +86,17 @@ const MainTab = () => {
   const dispatch = useAppDispatch();
 
   const releaseGame = () => {
-    dispatch(appendReleasedGame({ bugs, features, name: gameName }));
-    dispatch(resetFeatures());
-    dispatch(resetBugs());
+    const dispatchables = [];
+    if (features >= 1 && !achievementsState.helloWorldGame.achieved) {
+      dispatchables.push(enableHelloWorldGame());
+    }
+    if (bugs === 0 && !achievementsState.insectophobia.achieved) {
+      dispatchables.push(enableInsectophobia());
+    }
+    dispatchables.push(appendReleasedGame({ bugs, features, name: gameName }));
+    dispatchables.push(resetFeatures());
+    dispatchables.push(resetBugs());
+    dispatchables.forEach((value) => dispatch(value));
     setGameName("");
     setGameNamingModalOpen(false);
   };
@@ -139,7 +157,12 @@ const MainTab = () => {
       <Tooltip title={`+${roundPerSecond(perClick)} Money`}>
         <Button
           variant={"outlined"}
-          onClick={() => dispatch(incrementMoney(perClick))}
+          onClick={() => {
+            if (!achievementsState.notADreamJob.achieved) {
+              dispatch(enableNotADreamJob());
+            }
+            dispatch(incrementMoney(perClick));
+          }}
         >
           Work day job
         </Button>
@@ -152,6 +175,9 @@ const MainTab = () => {
             <Button
               variant={"outlined"}
               onClick={() => {
+                if (!achievementsState.helloWorld.achieved) {
+                  dispatch(enableHelloWorld());
+                }
                 dispatch(incrementMoney(-1));
                 dispatch(incrementFeatures(perClick));
                 dispatch(
@@ -171,6 +197,9 @@ const MainTab = () => {
             <Button
               variant={"outlined"}
               onClick={() => {
+                if (!achievementsState.bugSquasher.achieved) {
+                  dispatch(enableBugSquasher());
+                }
                 dispatch(incrementMoney(-1));
                 dispatch(incrementBugs(-1 * perClick));
               }}

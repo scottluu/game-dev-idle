@@ -14,6 +14,7 @@ import { bugFixerProductivityReducer } from "./slices/bugFixerProductivitySlice"
 import { featureDeveloperProductivityReducer } from "./slices/featureDeveloperProductivitySlice";
 import { clickingStrengthReducer } from "./slices/clickingStrengthSlice";
 import { officeReducer } from "./slices/officeSlice";
+import { achievementsStateReducer } from "./slices/achievementsStateSlice";
 
 export const store = configureStore({
   reducer: {
@@ -32,6 +33,7 @@ export const store = configureStore({
     gameProfitability: gameProfitabilityReducer,
     clickingStrength: clickingStrengthReducer,
     office: officeReducer,
+    achievementsState: achievementsStateReducer,
   },
 });
 

@@ -9,8 +9,10 @@ const getValFromLocalStorage = <T>(key: string) => {
   }
 };
 
-const useLocalStorage = <T>(key: string) => {
-  const [value, setValue] = useState<T | null>(getValFromLocalStorage(key));
+const useLocalStorage = <T>(key: string, initialState: T | null = null) => {
+  const fromLocalStorage = getValFromLocalStorage<T>(key);
+  const valInitialState = fromLocalStorage === null ? initialState : null;
+  const [value, setValue] = useState<T | null>(valInitialState);
   useEffect(() => {
     const interval = setInterval(() => {
       setValue(getValFromLocalStorage(key));

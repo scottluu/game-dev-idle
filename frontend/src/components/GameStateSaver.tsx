@@ -35,6 +35,9 @@ const GameStateSaver = () => {
   const gameProfitability = useAppSelector(
     (state) => state.gameProfitability.value,
   );
+  const achievementsState = useAppSelector(
+    (state) => state.achievementsState.value,
+  );
   const soldCompanies = useAppSelector((state) => state.soldCompanies.value);
   const bugsPerFeature = useAppSelector((state) => state.bugsPerFeature.value);
   const office = useAppSelector((state) => state.office.value);
@@ -73,6 +76,10 @@ const GameStateSaver = () => {
       localStorage.setItem("clickingStrength", clickingStrength.toString());
       localStorage.setItem("office", office.toString());
 
+      localStorage.setItem(
+        "achievementsState",
+        JSON.stringify(achievementsState),
+      );
       localStorage.setItem("lastSave", now.toString());
       setLastSave(Date.now());
     };
