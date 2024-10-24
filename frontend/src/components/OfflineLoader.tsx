@@ -38,7 +38,7 @@ const OfflineLoader = () => {
 
   useEffect(() => {
     const now = Date.now();
-    if (lastSave + 30000 >= now) {
+    if (lastSave + 30000 >= now || lastSave === 0) {
       setSaver(<GameStateSaver />);
       return;
     }
@@ -76,6 +76,7 @@ const OfflineLoader = () => {
     dispatch(incrementBugs(oldBugs - bugs));
     dispatch(incrementFeatures(oldFeatures - features));
     setSaver(<GameStateSaver />);
+    console.log("Loaded save");
   }, []);
 
   return <div>{saver}</div>;
