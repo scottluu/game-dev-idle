@@ -1,4 +1,4 @@
-import { Grid, Tooltip } from "@mui/joy";
+import { Card, CardContent, Grid, Stack, Tooltip, Typography } from "@mui/joy";
 import {
   Gi3dGlasses,
   Gi3dHammer,
@@ -69,24 +69,36 @@ const AchievementsTab = () => {
     (state) => state.achievementsState.value,
   );
   return (
-    <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-      {Object.keys(achievementsState).map((value: string) => {
-        const staticInfo =
-          StaticAchievementInfo[value as keyof AchievementsState];
-        return (
-          <Grid>
-            <Tooltip title={staticInfo.text}>
-              <staticInfo.icon
-                size={"3rem"}
-                color={getColor(
-                  achievementsState[value as keyof AchievementsState],
-                )}
-              />
-            </Tooltip>
-          </Grid>
-        );
-      })}
-    </Grid>
+    <>
+      <Stack direction={"column"} spacing={2}>
+        {Object.keys(achievementsState).map((value: string) => {
+          const staticInfo =
+            StaticAchievementInfo[value as keyof AchievementsState];
+          return (
+            <Card variant="outlined">
+              <CardContent>
+                <Stack
+                  direction={"row"}
+                  spacing={2}
+                  sx={{ justifyContent: "space-between" }}
+                >
+                  <staticInfo.icon
+                    size={"3rem"}
+                    color={getColor(
+                      achievementsState[value as keyof AchievementsState],
+                    )}
+                  />
+                  <Stack direction={"column"}>
+                    <Typography level="title-md">{value}</Typography>
+                    <Typography>{staticInfo.text}</Typography>
+                  </Stack>
+                </Stack>
+              </CardContent>
+            </Card>
+          );
+        })}
+      </Stack>
+    </>
   );
 };
 
