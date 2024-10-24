@@ -24,13 +24,14 @@ const ResetTab = () => {
   const dispatch = useAppDispatch();
   const resetGame = () => {
     [
+      resetSoldCompanies(),
       resetReleasedGames(),
-      resetMoney(),
       resetBugFixers(),
       resetFeatureDevelopers(),
+      resetOffice(),
+      resetMoney(),
       resetBugs(),
       resetFeatures(),
-      resetSoldCompanies(),
       resetBugFixerCost(),
       resetBugFixerProductivity(),
       resetBugsPerFeature(),
@@ -38,7 +39,6 @@ const ResetTab = () => {
       resetFeatureDeveloperProductivity(),
       resetGameProfitability(),
       resetClickingStrength(),
-      resetOffice(),
       resetAchievementsState(),
     ].forEach((value) => dispatch(value));
     setOpenConfirmationModal(false);

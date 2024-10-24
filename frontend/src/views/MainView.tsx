@@ -55,24 +55,32 @@ const MainView = () => {
   }
   if (lastLoad === null) {
     setLastLoad(Date.now());
+    return <Typography>Loading...</Typography>;
   } else if (lastLoad + 1000 * 60 * 30 < Date.now()) {
     setLastLoad(Date.now());
     location.reload();
     return <Typography>Refreshing...</Typography>;
   }
-  if (money >= 10 && !achievementsState.canBuyLunch.achieved) {
+  if (money >= 10 && achievementsState.canBuyLunch.achievedDate === null) {
     dispatch(enableCanBuyLunch());
   }
-  if (moneyPerSecond >= 2 && !achievementsState.passiveIncome.achieved) {
+  if (
+    moneyPerSecond >= 2 &&
+    achievementsState.passiveIncome.achievedDate === null
+  ) {
     dispatch(enablePassiveIncome());
   }
   if (
     spentSpecializationPoints > 0 &&
-    !achievementsState.basicallySpecialized
+    achievementsState.basicallySpecialized.achievedDate === null
   ) {
     dispatch(enableBasicallySpecialized());
   }
-  if (releasedGames.length >= 2 && !achievementsState.sequelStudio.achieved) {
+
+  if (
+    releasedGames.length >= 2 &&
+    achievementsState.sequelStudio.achievedDate === null
+  ) {
     dispatch(enableSequelStudio());
   }
 
@@ -84,13 +92,21 @@ const MainView = () => {
       <AchievementSnackbar />
       <MyPaper style={{ marginBottom: "1rem" }}>
         <Stack direction="column" spacing={2}>
-          <Stack direction="row" spacing={4} sx={{ alignItems: "baseline" }}>
+          <Stack
+            direction="row"
+            spacing={4}
+            sx={{ alignItems: "baseline", justifyContent: "space-between" }}
+          >
             <Typography level={"h1"}>${Math.round(money)}</Typography>
             <Typography>
               {moneyPerSecond > 0 ? `($${moneyPerSecond}/s)` : null}
             </Typography>
           </Stack>
-          <Stack direction="row" spacing={4} sx={{ alignItems: "baseline" }}>
+          <Stack
+            direction="row"
+            spacing={4}
+            sx={{ alignItems: "baseline", justifyContent: "space-between" }}
+          >
             <Typography level={"h3"}>
               Features: {Math.round(features)}
             </Typography>
@@ -100,7 +116,11 @@ const MainView = () => {
                 : null}
             </Typography>
           </Stack>
-          <Stack direction="row" spacing={4} sx={{ alignItems: "baseline" }}>
+          <Stack
+            direction="row"
+            spacing={4}
+            sx={{ alignItems: "baseline", justifyContent: "space-between" }}
+          >
             <Typography level={"h3"}>Bugs: {Math.round(bugs)}</Typography>
             <Typography>
               {bugFixers + featureDevelopers > 0

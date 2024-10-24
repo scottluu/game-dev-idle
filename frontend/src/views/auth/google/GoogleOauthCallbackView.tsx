@@ -22,7 +22,6 @@ const GoogleOauthCallbackView = () => {
   }, []);
   useEffect(() => {
     if (email !== null && email !== undefined) {
-      console.log("Email: ", email);
       window.location.href = "/";
     }
   }, [email]);

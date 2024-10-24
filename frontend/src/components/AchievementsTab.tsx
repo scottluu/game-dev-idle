@@ -1,4 +1,4 @@
-import { Card, CardContent, Grid, Stack, Tooltip, Typography } from "@mui/joy";
+import { Card, CardContent, Stack, Typography } from "@mui/joy";
 import {
   Gi3dGlasses,
   Gi3dHammer,
@@ -18,7 +18,9 @@ import {
 } from "../slices/achievementsStateSlice";
 
 const getColor = (achievement: AchievementState | undefined) => {
-  return achievement !== undefined && achievement.achieved ? "green" : "black";
+  return achievement !== undefined && achievement.achievedDate !== null
+    ? "green"
+    : "black";
 };
 
 export const StaticAchievementInfo = {
@@ -74,6 +76,7 @@ const AchievementsTab = () => {
         {Object.keys(achievementsState).map((value: string) => {
           const staticInfo =
             StaticAchievementInfo[value as keyof AchievementsState];
+          const state = achievementsState[value as keyof AchievementsState];
           return (
             <Card variant="outlined">
               <CardContent>
@@ -82,15 +85,15 @@ const AchievementsTab = () => {
                   spacing={2}
                   sx={{ justifyContent: "space-between" }}
                 >
-                  <staticInfo.icon
-                    size={"3rem"}
-                    color={getColor(
-                      achievementsState[value as keyof AchievementsState],
-                    )}
-                  />
-                  <Stack direction={"column"}>
+                  <staticInfo.icon size={"3rem"} color={getColor(state)} />
+                  <Stack direction={"column"} sx={{ alignItems: "flex-end" }}>
                     <Typography level="title-md">{value}</Typography>
                     <Typography>{staticInfo.text}</Typography>
+                    {state.achievedDate !== null ? (
+                      <Typography>
+                        Obtained {new Date(state.achievedDate).toString()}
+                      </Typography>
+                    ) : null}
                   </Stack>
                 </Stack>
               </CardContent>

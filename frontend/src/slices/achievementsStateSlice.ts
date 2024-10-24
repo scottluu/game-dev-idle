@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export type AchievementState = {
-  achieved: boolean;
+  achievedDate: number | null;
 };
 
 export type AchievementsState = {
@@ -24,17 +24,18 @@ type AchievementsStateSliceType = {
 const fromLocalStorage = localStorage.getItem("achievementsState");
 
 const defaultInitialState: AchievementsState = {
-  helloWorldGame: { achieved: false },
-  insectophobia: { achieved: false },
-  newBestFriend: { achieved: false },
-  canBuyLunch: { achieved: false },
-  passiveIncome: { achieved: false },
-  basicallySpecialized: { achieved: false },
-  notADreamJob: { achieved: false },
-  helloWorld: { achieved: false },
-  bugSquasher: { achieved: false },
-  sequelStudio: { achieved: false },
+  helloWorldGame: { achievedDate: null },
+  insectophobia: { achievedDate: null },
+  newBestFriend: { achievedDate: null },
+  canBuyLunch: { achievedDate: null },
+  passiveIncome: { achievedDate: null },
+  basicallySpecialized: { achievedDate: null },
+  notADreamJob: { achievedDate: null },
+  helloWorld: { achievedDate: null },
+  bugSquasher: { achievedDate: null },
+  sequelStudio: { achievedDate: null },
 };
+Object.freeze(defaultInitialState);
 
 const initialState: AchievementsStateSliceType = {
   value:
@@ -50,37 +51,64 @@ const achievementsStateSlice = createSlice({
   reducers: {
     // Use the PayloadAction type to declare the contents of `action.payload`
     enableHelloWorldGame: (state) => {
-      state.value = { ...state.value, helloWorldGame: { achieved: true } };
+      state.value = {
+        ...state.value,
+        helloWorldGame: { achievedDate: Date.now() },
+      };
     },
     enableInsectophobia: (state) => {
-      state.value = { ...state.value, insectophobia: { achieved: true } };
+      state.value = {
+        ...state.value,
+        insectophobia: { achievedDate: Date.now() },
+      };
     },
     enableNewBestFriend: (state) => {
-      state.value = { ...state.value, newBestFriend: { achieved: true } };
+      state.value = {
+        ...state.value,
+        newBestFriend: { achievedDate: Date.now() },
+      };
     },
     enableCanBuyLunch: (state) => {
-      state.value = { ...state.value, canBuyLunch: { achieved: true } };
+      state.value = {
+        ...state.value,
+        canBuyLunch: { achievedDate: Date.now() },
+      };
     },
     enablePassiveIncome: (state) => {
-      state.value = { ...state.value, passiveIncome: { achieved: true } };
+      state.value = {
+        ...state.value,
+        passiveIncome: { achievedDate: Date.now() },
+      };
     },
     enableBasicallySpecialized: (state) => {
       state.value = {
         ...state.value,
-        basicallySpecialized: { achieved: true },
+        basicallySpecialized: { achievedDate: Date.now() },
       };
     },
     enableNotADreamJob: (state) => {
-      state.value = { ...state.value, notADreamJob: { achieved: true } };
+      state.value = {
+        ...state.value,
+        notADreamJob: { achievedDate: Date.now() },
+      };
     },
     enableHelloWorld: (state) => {
-      state.value = { ...state.value, helloWorld: { achieved: true } };
+      state.value = {
+        ...state.value,
+        helloWorld: { achievedDate: Date.now() },
+      };
     },
     enableBugSquasher: (state) => {
-      state.value = { ...state.value, bugSquasher: { achieved: true } };
+      state.value = {
+        ...state.value,
+        bugSquasher: { achievedDate: Date.now() },
+      };
     },
     enableSequelStudio: (state) => {
-      state.value = { ...state.value, sequelStudio: { achieved: true } };
+      state.value = {
+        ...state.value,
+        sequelStudio: { achievedDate: Date.now() },
+      };
     },
     resetAchievementsState: (state) => {
       state.value = defaultInitialState;

@@ -76,7 +76,6 @@ const OfflineLoader = () => {
     dispatch(incrementBugs(oldBugs - bugs));
     dispatch(incrementFeatures(oldFeatures - features));
     setSaver(<GameStateSaver />);
-    console.log("Loaded save");
   }, []);
 
   return <div>{saver}</div>;

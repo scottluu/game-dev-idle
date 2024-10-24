@@ -87,10 +87,13 @@ const MainTab = () => {
 
   const releaseGame = () => {
     const dispatchables = [];
-    if (features >= 1 && !achievementsState.helloWorldGame.achieved) {
+    if (
+      features >= 1 &&
+      achievementsState.helloWorldGame.achievedDate === null
+    ) {
       dispatchables.push(enableHelloWorldGame());
     }
-    if (bugs === 0 && !achievementsState.insectophobia.achieved) {
+    if (bugs === 0 && achievementsState.insectophobia.achievedDate === null) {
       dispatchables.push(enableInsectophobia());
     }
     dispatchables.push(appendReleasedGame({ bugs, features, name: gameName }));
@@ -158,7 +161,7 @@ const MainTab = () => {
         <Button
           variant={"outlined"}
           onClick={() => {
-            if (!achievementsState.notADreamJob.achieved) {
+            if (achievementsState.notADreamJob.achievedDate === null) {
               dispatch(enableNotADreamJob());
             }
             dispatch(incrementMoney(perClick));
@@ -175,7 +178,7 @@ const MainTab = () => {
             <Button
               variant={"outlined"}
               onClick={() => {
-                if (!achievementsState.helloWorld.achieved) {
+                if (achievementsState.helloWorld.achievedDate === null) {
                   dispatch(enableHelloWorld());
                 }
                 dispatch(incrementMoney(-1));
@@ -197,7 +200,7 @@ const MainTab = () => {
             <Button
               variant={"outlined"}
               onClick={() => {
-                if (!achievementsState.bugSquasher.achieved) {
+                if (achievementsState.bugSquasher.achievedDate === null) {
                   dispatch(enableBugSquasher());
                 }
                 dispatch(incrementMoney(-1));

@@ -81,7 +81,6 @@ const GameStateSaver = () => {
         JSON.stringify(achievementsState),
       );
       localStorage.setItem("lastSave", now.toString());
-      setLastSave(Date.now());
     };
     const interval = setInterval(save, 100);
     return () => clearInterval(interval);
@@ -97,6 +96,7 @@ const GameStateSaver = () => {
     soldCompanies,
     gameProfitability,
     lastSave,
+    achievementsState,
   ]);
   return false;
 };
