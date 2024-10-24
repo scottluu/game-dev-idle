@@ -22,6 +22,7 @@ import useAppDispatch from "../hooks/useAppDispatch";
 import {
   enableBasicallySpecialized,
   enableCanBuyLunch,
+  enableNewBestFriend,
   enablePassiveIncome,
   enableSequelStudio,
 } from "../slices/achievementsStateSlice";
@@ -82,6 +83,12 @@ const MainView = () => {
     achievementsState.sequelStudio.achievedDate === null
   ) {
     dispatch(enableSequelStudio());
+  }
+  if (
+    bugFixers + featureDevelopers > 0 &&
+    achievementsState.newBestFriend.achievedDate === null
+  ) {
+    dispatch(enableNewBestFriend());
   }
 
   return (

@@ -150,9 +150,6 @@ const BugFixersRow = ({ hireAmount }: BugFixersRowProps) => {
               <IconButton
                 disabled={!canHire}
                 onClick={() => {
-                  if (!achievementsState.newBestFriend) {
-                    dispatch(enableNewBestFriend());
-                  }
                   dispatch(incrementMoney(-1 * bugFixerCostAmount));
                   dispatch(incrementBugFixers(hireAmount));
                 }}
@@ -255,9 +252,6 @@ const FeatureDevelopersRow = ({ hireAmount }: { hireAmount: number }) => {
               <IconButton
                 disabled={!canHire}
                 onClick={() => {
-                  if (!achievementsState.newBestFriend) {
-                    dispatch(enableNewBestFriend());
-                  }
                   dispatch(incrementMoney(-1 * featureDeveloperCostAmount));
                   dispatch(incrementFeatureDevelopers(hireAmount));
                 }}
