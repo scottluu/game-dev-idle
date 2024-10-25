@@ -12,7 +12,6 @@ import { Radio } from "@mui/joy";
 import { incrementOffice } from "../slices/officeSlice";
 import useMoneyPerSecond from "../hooks/useMoneyPerSecond";
 import { computeOfficeCostPerSecond, roundPerSecond } from "../utils";
-import { enableNewBestFriend } from "../slices/achievementsStateSlice";
 
 const computeCost = (
   currentAmount: number,
@@ -73,9 +72,7 @@ const BugFixersRow = ({ hireAmount }: BugFixersRowProps) => {
   const bugFixerCost = useAppSelector((state) => state.bugFixerCost.value);
   const bugFixers = useAppSelector((state) => state.bugFixers.value);
   const money = useAppSelector((state) => state.money.value);
-  const achievementsState = useAppSelector(
-    (state) => state.achievementsState.value,
-  );
+
   const hasMoreOfficeSpace = useHasMoreOfficeSpace({ hireAmount });
 
   const bugFixersRefund = computeRefund(
@@ -177,9 +174,7 @@ const FeatureDevelopersRow = ({ hireAmount }: { hireAmount: number }) => {
   const isFeatureDevelopersPaused = useAppSelector(
     (state) => !state.featureDevelopers.enabled,
   );
-  const achievementsState = useAppSelector(
-    (state) => state.achievementsState.value,
-  );
+
   const featureDeveloperCostAmount = computeCost(
     featureDevelopers,
     hireAmount,

@@ -38,13 +38,12 @@ import { incrementClickingStrength } from "../slices/clickingStrengthSlice";
 import { resetOffice } from "../slices/officeSlice";
 import useMoneyPerSecond from "../hooks/useMoneyPerSecond";
 import useSpentSpecializationPoints from "../hooks/useSpentSpecializationPoints";
+import { enableHelloWorld } from "../slices/achievementsStateSlice";
 import {
-  enableBugSquasher,
-  enableHelloWorld,
-  enableHelloWorldGame,
-  enableInsectophobia,
-  enableNotADreamJob,
-} from "../slices/achievementsStateSlice";
+  incrementNumDayJobClicks,
+  incrementNumBugFixClicks,
+  incrementNumFeatureDevelopmentClicks,
+} from "../slices/numClicksSlice";
 
 const MainTab = () => {
   const specializationPoints = useSpecializationPoints();
@@ -87,15 +86,7 @@ const MainTab = () => {
 
   const releaseGame = () => {
     const dispatchables = [];
-    if (
-      features >= 1 &&
-      achievementsState.helloWorldGame.achievedDate === null
-    ) {
-      dispatchables.push(enableHelloWorldGame());
-    }
-    if (bugs === 0 && achievementsState.insectophobia.achievedDate === null) {
-      dispatchables.push(enableInsectophobia());
-    }
+
     dispatchables.push(appendReleasedGame({ bugs, features, name: gameName }));
     dispatchables.push(resetFeatures());
     dispatchables.push(resetBugs());
@@ -161,10 +152,8 @@ const MainTab = () => {
         <Button
           variant={"outlined"}
           onClick={() => {
-            if (achievementsState.notADreamJob.achievedDate === null) {
-              dispatch(enableNotADreamJob());
-            }
             dispatch(incrementMoney(perClick));
+            dispatch(incrementNumDayJobClicks(1));
           }}
         >
           Work day job
@@ -178,14 +167,12 @@ const MainTab = () => {
             <Button
               variant={"outlined"}
               onClick={() => {
-                if (achievementsState.helloWorld.achievedDate === null) {
-                  dispatch(enableHelloWorld());
-                }
                 dispatch(incrementMoney(-1));
                 dispatch(incrementFeatures(perClick));
                 dispatch(
                   incrementBugs(features * Math.pow(0.9, bugsPerFeature)),
                 );
+                dispatch(incrementNumFeatureDevelopmentClicks(1));
               }}
               disabled={money < 1 || bugs > features}
             >
@@ -200,11 +187,9 @@ const MainTab = () => {
             <Button
               variant={"outlined"}
               onClick={() => {
-                if (achievementsState.bugSquasher.achievedDate === null) {
-                  dispatch(enableBugSquasher());
-                }
                 dispatch(incrementMoney(-1));
                 dispatch(incrementBugs(-1 * perClick));
+                dispatch(incrementNumBugFixClicks(1));
               }}
               disabled={money < 1 || bugs === 0}
             >

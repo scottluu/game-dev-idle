@@ -41,6 +41,11 @@ const GameStateSaver = () => {
   const soldCompanies = useAppSelector((state) => state.soldCompanies.value);
   const bugsPerFeature = useAppSelector((state) => state.bugsPerFeature.value);
   const office = useAppSelector((state) => state.office.value);
+  const numDayJobClicks = useAppSelector((state) => state.numClicks.dayJob);
+  const numBugFixClicks = useAppSelector((state) => state.numClicks.bugFix);
+  const numFeatureDevelopmentClicks = useAppSelector(
+    (state) => state.numClicks.featureDevelopment,
+  );
 
   useEffect(() => {
     const save = () => {
@@ -75,6 +80,12 @@ const GameStateSaver = () => {
       localStorage.setItem("bugsPerFeature", bugsPerFeature.toString());
       localStorage.setItem("clickingStrength", clickingStrength.toString());
       localStorage.setItem("office", office.toString());
+      localStorage.setItem("numDayJobClicks", numDayJobClicks.toString());
+      localStorage.setItem("numBugFixClicks", numBugFixClicks.toString());
+      localStorage.setItem(
+        "numFeatureDevelopmentClicks",
+        numFeatureDevelopmentClicks.toString(),
+      );
 
       localStorage.setItem(
         "achievementsState",
@@ -97,6 +108,9 @@ const GameStateSaver = () => {
     gameProfitability,
     lastSave,
     achievementsState,
+    numBugFixClicks,
+    numFeatureDevelopmentClicks,
+    numDayJobClicks,
   ]);
   return false;
 };

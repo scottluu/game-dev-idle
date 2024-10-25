@@ -15,6 +15,7 @@ import { featureDeveloperProductivityReducer } from "./slices/featureDeveloperPr
 import { clickingStrengthReducer } from "./slices/clickingStrengthSlice";
 import { officeReducer } from "./slices/officeSlice";
 import { achievementsStateReducer } from "./slices/achievementsStateSlice";
+import { numClicksReducer } from "./slices/numClicksSlice";
 
 export const store = configureStore({
   reducer: {
@@ -34,6 +35,7 @@ export const store = configureStore({
     clickingStrength: clickingStrengthReducer,
     office: officeReducer,
     achievementsState: achievementsStateReducer,
+    numClicks: numClicksReducer,
   },
 });
 

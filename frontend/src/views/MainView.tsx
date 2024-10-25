@@ -18,19 +18,9 @@ import useLastSave from "../hooks/UseLastSave";
 import OfflineLoader from "../components/OfflineLoader";
 import useLocalStorage from "../hooks/UseLocalStorage";
 import AchievementsTab from "../components/AchievementsTab";
-import useAppDispatch from "../hooks/useAppDispatch";
-import {
-  enableBasicallySpecialized,
-  enableCanBuyLunch,
-  enableNewBestFriend,
-  enablePassiveIncome,
-  enableSequelStudio,
-} from "../slices/achievementsStateSlice";
-import useSpentSpecializationPoints from "../hooks/useSpentSpecializationPoints";
-import AchievementSnackbar from "../components/AchievementSnackbar";
+import AchievementsManager from "../components/AchievementsManager";
 
 const MainView = () => {
-  const dispatch = useAppDispatch();
   const money = useAppSelector((state) => state.money.value);
   const bugs = useAppSelector((state) => state.bugs.value);
   const bugFixers = useAppSelector((state) => state.bugFixers.value);
@@ -39,12 +29,8 @@ const MainView = () => {
     (state) => state.featureDevelopers.value,
   );
   const releasedGames = useAppSelector((state) => state.releasedGames.value);
-  const achievementsState = useAppSelector(
-    (state) => state.achievementsState.value,
-  );
   const moneyPerSecond = useMoneyPerSecond();
   const featuresPerSecond = useFeaturesPerSecond();
-  const spentSpecializationPoints = useSpentSpecializationPoints();
   const bugsPerSecond = useBugsPerSecond();
   const { lastSave } = useLastSave();
   const { value: lastLoad, setter: setLastLoad } =
@@ -62,41 +48,13 @@ const MainView = () => {
     location.reload();
     return <Typography>Refreshing...</Typography>;
   }
-  if (money >= 10 && achievementsState.canBuyLunch.achievedDate === null) {
-    dispatch(enableCanBuyLunch());
-  }
-  if (
-    moneyPerSecond >= 2 &&
-    achievementsState.passiveIncome.achievedDate === null
-  ) {
-    dispatch(enablePassiveIncome());
-  }
-  if (
-    spentSpecializationPoints > 0 &&
-    achievementsState.basicallySpecialized.achievedDate === null
-  ) {
-    dispatch(enableBasicallySpecialized());
-  }
-
-  if (
-    releasedGames.length >= 2 &&
-    achievementsState.sequelStudio.achievedDate === null
-  ) {
-    dispatch(enableSequelStudio());
-  }
-  if (
-    bugFixers + featureDevelopers > 0 &&
-    achievementsState.newBestFriend.achievedDate === null
-  ) {
-    dispatch(enableNewBestFriend());
-  }
 
   return (
     <div style={{ width: "70vw" }}>
       <GameStateManager />
       <GameStateSaver />
       <MyAppBar />
-      <AchievementSnackbar />
+      <AchievementsManager />
       <MyPaper style={{ marginBottom: "1rem" }}>
         <Stack direction="column" spacing={2}>
           <Stack

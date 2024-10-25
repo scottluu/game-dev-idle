@@ -1,21 +1,27 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { z } from "zod";
 
-export type AchievementState = {
-  achievedDate: number | null;
-};
+const AchievementStateT = z
+  .object({
+    achievedDate: z.number().nullable().default(null),
+  })
+  .default({ achievedDate: null });
 
-export type AchievementsState = {
-  helloWorldGame: AchievementState;
-  insectophobia: AchievementState;
-  newBestFriend: AchievementState;
-  canBuyLunch: AchievementState;
-  passiveIncome: AchievementState;
-  basicallySpecialized: AchievementState;
-  notADreamJob: AchievementState;
-  helloWorld: AchievementState;
-  bugSquasher: AchievementState;
-  sequelStudio: AchievementState;
-};
+export type AchievementState = z.infer<typeof AchievementStateT>;
+
+const AchievementsStateT = z.object({
+  helloWorldGame: AchievementStateT,
+  insectophobia: AchievementStateT,
+  newBestFriend: AchievementStateT,
+  canBuyLunch: AchievementStateT,
+  passiveIncome: AchievementStateT,
+  basicallySpecialized: AchievementStateT,
+  notADreamJob: AchievementStateT,
+  helloWorld: AchievementStateT,
+  bugSquasher: AchievementStateT,
+  sequelStudio: AchievementStateT,
+});
+export type AchievementsState = z.infer<typeof AchievementsStateT>;
 
 type AchievementsStateSliceType = {
   value: AchievementsState;
@@ -37,12 +43,10 @@ const defaultInitialState: AchievementsState = {
 };
 Object.freeze(defaultInitialState);
 
-const initialState: AchievementsStateSliceType = {
-  value:
-    fromLocalStorage === null
-      ? defaultInitialState
-      : JSON.parse(fromLocalStorage),
-};
+const initialState: AchievementsStateSliceType =
+  fromLocalStorage === null
+    ? { value: defaultInitialState }
+    : { value: AchievementsStateT.parse(JSON.parse(fromLocalStorage)) };
 
 const achievementsStateSlice = createSlice({
   name: "achievementsState",

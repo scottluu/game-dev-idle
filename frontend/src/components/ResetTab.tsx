@@ -18,6 +18,7 @@ import { resetGameProfitability } from "../slices/gameProfitabilitySlice";
 import { resetClickingStrength } from "../slices/clickingStrengthSlice";
 import { resetOffice } from "../slices/officeSlice";
 import { resetAchievementsState } from "../slices/achievementsStateSlice";
+import { resetClicks } from "../slices/numClicksSlice";
 
 const ResetTab = () => {
   const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
@@ -39,6 +40,7 @@ const ResetTab = () => {
       resetFeatureDeveloperProductivity(),
       resetGameProfitability(),
       resetClickingStrength(),
+      resetClicks(),
       resetAchievementsState(),
     ].forEach((value) => dispatch(value));
     setOpenConfirmationModal(false);
