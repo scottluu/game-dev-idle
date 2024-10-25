@@ -10,6 +10,8 @@ import {
   GiAbstract001,
   GiAbstract002,
   GiAbstract003,
+  GiAbstract004,
+  GiAbstract005,
 } from "react-icons/gi";
 import useAppSelector from "../hooks/useAppSelector";
 import {
@@ -63,6 +65,14 @@ export const StaticAchievementInfo = {
   sequelStudio: {
     text: "Release 2 games in the same company",
     icon: GiAbstract003,
+  },
+  buggyMess: {
+    text: "Have 8 times more bugs than features",
+    icon: GiAbstract004,
+  },
+  bugOverflow: {
+    text: "Have 20 times more bugs/s than features/s",
+    icon: GiAbstract005,
   },
 };
 

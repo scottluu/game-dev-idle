@@ -20,6 +20,8 @@ const AchievementsStateT = z.object({
   helloWorld: AchievementStateT,
   bugSquasher: AchievementStateT,
   sequelStudio: AchievementStateT,
+  buggyMess: AchievementStateT,
+  bugOverflow: AchievementStateT,
 });
 export type AchievementsState = z.infer<typeof AchievementsStateT>;
 
@@ -40,6 +42,8 @@ const defaultInitialState: AchievementsState = {
   helloWorld: { achievedDate: null },
   bugSquasher: { achievedDate: null },
   sequelStudio: { achievedDate: null },
+  buggyMess: { achievedDate: null },
+  bugOverflow: { achievedDate: null },
 };
 Object.freeze(defaultInitialState);
 
@@ -114,6 +118,18 @@ const achievementsStateSlice = createSlice({
         sequelStudio: { achievedDate: Date.now() },
       };
     },
+    enableBuggyMess: (state) => {
+      state.value = {
+        ...state.value,
+        buggyMess: { achievedDate: Date.now() },
+      };
+    },
+    enableBugOverflow: (state) => {
+      state.value = {
+        ...state.value,
+        bugOverflow: { achievedDate: Date.now() },
+      };
+    },
     resetAchievementsState: (state) => {
       state.value = defaultInitialState;
     },
@@ -131,6 +147,8 @@ export const {
   enableHelloWorld,
   enableBugSquasher,
   enableSequelStudio,
+  enableBuggyMess,
+  enableBugOverflow,
   resetAchievementsState,
 } = achievementsStateSlice.actions;
 export const achievementsStateReducer = achievementsStateSlice.reducer;

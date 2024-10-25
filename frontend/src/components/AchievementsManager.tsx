@@ -1,6 +1,8 @@
 import AchievementSnackbar from "./AchievementSnackbar";
 import {
   enableBasicallySpecialized,
+  enableBuggyMess,
+  enableBugOverflow,
   enableBugSquasher,
   enableCanBuyLunch,
   enableHelloWorld,
@@ -37,6 +39,31 @@ const AchievementsManager = () => {
   const featuresPerSecond = useFeaturesPerSecond();
   const spentSpecializationPoints = useSpentSpecializationPoints();
   const bugsPerSecond = useBugsPerSecond();
+
+  useEffect(() => {
+    if (
+      bugsPerSecond > 20 * featuresPerSecond &&
+      featuresPerSecond > 1 &&
+      achievementsState.bugOverflow.achievedDate === null
+    ) {
+      dispatch(enableBugOverflow());
+    }
+  }, [
+    bugsPerSecond,
+    featuresPerSecond,
+    achievementsState.bugOverflow.achievedDate,
+  ]);
+
+  useEffect(() => {
+    if (
+      features > 0 &&
+      bugs > 10 * features &&
+      achievementsState.buggyMess.achievedDate === null
+    ) {
+      dispatch(enableBuggyMess());
+    }
+  }, [bugs, features, achievementsState.buggyMess.achievedDate]);
+
   useEffect(() => {
     if (money >= 10 && achievementsState.canBuyLunch.achievedDate === null) {
       dispatch(enableCanBuyLunch());
