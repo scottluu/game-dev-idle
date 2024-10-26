@@ -22,6 +22,7 @@ const AchievementsStateT = z.object({
   sequelStudio: AchievementStateT,
   buggyMess: AchievementStateT,
   bugOverflow: AchievementStateT,
+  sequelOfTheYear: AchievementStateT,
 });
 export type AchievementsState = z.infer<typeof AchievementsStateT>;
 
@@ -44,6 +45,7 @@ const defaultInitialState: AchievementsState = {
   sequelStudio: { achievedDate: null },
   buggyMess: { achievedDate: null },
   bugOverflow: { achievedDate: null },
+  sequelOfTheYear: { achievedDate: null },
 };
 Object.freeze(defaultInitialState);
 
@@ -128,6 +130,12 @@ const achievementsStateSlice = createSlice({
       state.value = {
         ...state.value,
         bugOverflow: { achievedDate: Date.now() },
+      };
+    },
+    enableSequelOfTheYear: (state) => {
+      state.value = {
+        ...state.value,
+        sequelOfTheYear: { achievedDate: Date.now() },
       };
     },
     resetAchievementsState: (state) => {

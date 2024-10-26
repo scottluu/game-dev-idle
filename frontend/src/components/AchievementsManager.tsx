@@ -109,6 +109,12 @@ const AchievementsManager = () => {
       dispatch(enableHelloWorldGame());
     }
     if (
+      achievementsState.sequelOfTheYear.achievedDate === null &&
+      releasedGames.find((value) => value.features > 59) !== undefined
+    ) {
+      dispatch(enableHelloWorldGame());
+    }
+    if (
       achievementsState.insectophobia.achievedDate === null &&
       releasedGames.find((value) => value.bugs === 0) !== undefined
     ) {
@@ -123,6 +129,7 @@ const AchievementsManager = () => {
   }, [
     releasedGames,
     achievementsState.helloWorldGame.achievedDate,
+    achievementsState.sequelOfTheYear.achievedDate,
     achievementsState.insectophobia.achievedDate,
     achievementsState.sequelStudio.achievedDate,
   ]);

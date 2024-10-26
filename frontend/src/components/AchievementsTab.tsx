@@ -27,8 +27,12 @@ const getColor = (achievement: AchievementState | undefined) => {
 
 export const StaticAchievementInfo = {
   helloWorldGame: {
-    text: "Release a game with 1 feature",
+    text: "Release a game with at least 6 features",
     icon: Gi3dGlasses,
+  },
+  sequelOfTheYear: {
+    text: "Release a game with at least 60 features",
+    icon: GiAbstract005,
   },
   insectophobia: {
     text: "Release a game with 0 bugs",
