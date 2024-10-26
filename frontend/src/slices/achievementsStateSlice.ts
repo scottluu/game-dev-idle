@@ -23,6 +23,7 @@ const AchievementsStateT = z.object({
   buggyMess: AchievementStateT,
   bugOverflow: AchievementStateT,
   sequelOfTheYear: AchievementStateT,
+  groupChat: AchievementStateT,
 });
 export type AchievementsState = z.infer<typeof AchievementsStateT>;
 
@@ -46,6 +47,7 @@ const defaultInitialState: AchievementsState = {
   buggyMess: { achievedDate: null },
   bugOverflow: { achievedDate: null },
   sequelOfTheYear: { achievedDate: null },
+  groupChat: { achievedDate: null },
 };
 Object.freeze(defaultInitialState);
 
@@ -138,6 +140,12 @@ const achievementsStateSlice = createSlice({
         sequelOfTheYear: { achievedDate: Date.now() },
       };
     },
+    enableGroupChat: (state) => {
+      state.value = {
+        ...state.value,
+        groupChat: { achievedDate: Date.now() },
+      };
+    },
     resetAchievementsState: (state) => {
       state.value = defaultInitialState;
     },
@@ -157,6 +165,8 @@ export const {
   enableSequelStudio,
   enableBuggyMess,
   enableBugOverflow,
+  enableSequelOfTheYear,
+  enableGroupChat,
   resetAchievementsState,
 } = achievementsStateSlice.actions;
 export const achievementsStateReducer = achievementsStateSlice.reducer;

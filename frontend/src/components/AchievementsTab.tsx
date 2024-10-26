@@ -12,6 +12,7 @@ import {
   GiAbstract003,
   GiAbstract004,
   GiAbstract005,
+  GiAbstract006,
 } from "react-icons/gi";
 import useAppSelector from "../hooks/useAppSelector";
 import {
@@ -41,6 +42,10 @@ export const StaticAchievementInfo = {
   newBestFriend: {
     text: "Have 1 employee",
     icon: Gi3dMeeple,
+  },
+  groupChat: {
+    text: "Have 15 employees",
+    icon: GiAbstract006,
   },
   canBuyLunch: {
     text: "Have $10",

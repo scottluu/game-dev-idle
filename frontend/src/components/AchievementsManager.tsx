@@ -5,12 +5,14 @@ import {
   enableBugOverflow,
   enableBugSquasher,
   enableCanBuyLunch,
+  enableGroupChat,
   enableHelloWorld,
   enableHelloWorldGame,
   enableInsectophobia,
   enableNewBestFriend,
   enableNotADreamJob,
   enablePassiveIncome,
+  enableSequelOfTheYear,
   enableSequelStudio,
 } from "../slices/achievementsStateSlice";
 import useAppDispatch from "../hooks/useAppDispatch";
@@ -95,10 +97,17 @@ const AchievementsManager = () => {
     ) {
       dispatch(enableNewBestFriend());
     }
+    if (
+      bugFixers + featureDevelopers > 14 &&
+      achievementsState.groupChat.achievedDate === null
+    ) {
+      dispatch(enableGroupChat());
+    }
   }, [
     bugFixers,
     featureDevelopers,
     achievementsState.newBestFriend.achievedDate,
+    achievementsState.groupChat.achievedDate,
   ]);
 
   useEffect(() => {
@@ -112,7 +121,7 @@ const AchievementsManager = () => {
       achievementsState.sequelOfTheYear.achievedDate === null &&
       releasedGames.find((value) => value.features > 59) !== undefined
     ) {
-      dispatch(enableHelloWorldGame());
+      dispatch(enableSequelOfTheYear());
     }
     if (
       achievementsState.insectophobia.achievedDate === null &&
