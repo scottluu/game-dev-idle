@@ -9,7 +9,7 @@ include = ["game_dev_idle/app/py.typed"]
 [tool.poetry.dependencies]
 python = "^3.12"
 aiofiles = "^24.1.0"
-uvicorn = "^0.31.1"
+uvicorn = "^0.34.0"
 litestar = "^2.12.1"
 pydantic = {extras = ["email"], version = "^2.9.2"}
 pydantic-config = "^0.3.0"
