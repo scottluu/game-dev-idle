@@ -38,12 +38,12 @@ import { incrementClickingStrength } from "../slices/clickingStrengthSlice";
 import { resetOffice } from "../slices/officeSlice";
 import useMoneyPerSecond from "../hooks/useMoneyPerSecond";
 import useSpentSpecializationPoints from "../hooks/useSpentSpecializationPoints";
-import { enableHelloWorld } from "../slices/achievementsStateSlice";
 import {
   incrementNumDayJobClicks,
   incrementNumBugFixClicks,
   incrementNumFeatureDevelopmentClicks,
 } from "../slices/numClicksSlice";
+import { incrementHype } from "../slices/hypeSlice";
 
 const MainTab = () => {
   const specializationPoints = useSpecializationPoints();
@@ -68,13 +68,11 @@ const MainTab = () => {
   const featureDevelopers = useAppSelector(
     (state) => state.featureDevelopers.value,
   );
-  const achievementsState = useAppSelector(
-    (state) => state.achievementsState.value,
-  );
   const clickingStrength = useAppSelector(
     (state) => state.clickingStrength.value,
   );
   const bugs = useAppSelector((state) => state.bugs.value);
+  const hype = useAppSelector((state) => state.hype.value);
   const features = useAppSelector((state) => state.features.value);
   const releasedGames = useAppSelector((state) => state.releasedGames.value);
   const soldCompanies = useAppSelector((state) => state.soldCompanies.value);
@@ -87,7 +85,9 @@ const MainTab = () => {
   const releaseGame = () => {
     const dispatchables = [];
 
-    dispatchables.push(appendReleasedGame({ bugs, features, name: gameName }));
+    dispatchables.push(
+      appendReleasedGame({ bugs, features, name: gameName, hype }),
+    );
     dispatchables.push(resetFeatures());
     dispatchables.push(resetBugs());
     dispatchables.forEach((value) => dispatch(value));
@@ -140,12 +140,87 @@ const MainTab = () => {
 
   const additionalMoneyPerSecond = roundMoney(
     computeMoneyPerSecondForSingleGame(
-      { bugs, features, name: "" },
+      { bugs, features, name: "", hype },
       gameProfitability,
     ),
   );
   const moneyPerSecond = useMoneyPerSecond();
   const perClick = Math.pow(1.3, clickingStrength);
+  const fixBugsButton = (
+    <Tooltip
+      title={`-1 Money, -${roundPerSecond(perClick)} Bug${money < 1 ? " | Not enough money" : bugs === 0 ? " | No bugs to fix" : ""}`}
+    >
+      <span>
+        <Button
+          variant={"outlined"}
+          onClick={() => {
+            dispatch(incrementMoney(-1));
+            dispatch(incrementBugs(-1 * perClick));
+            dispatch(incrementNumBugFixClicks(1));
+          }}
+          disabled={money < 1 || bugs === 0}
+        >
+          Fix bugs
+        </Button>
+      </span>
+    </Tooltip>
+  );
+  const createFeaturesButton = (
+    <Tooltip
+      title={`-1 Money, +${roundPerSecond(perClick)} Feature, +${Math.round(features * Math.pow(0.9, bugsPerFeature))} Bugs${money === 0 ? " | Not enough money" : bugs > features ? " | Too many bugs" : ""}`}
+    >
+      <span>
+        <Button
+          variant={"outlined"}
+          onClick={() => {
+            dispatch(incrementMoney(-1));
+            dispatch(incrementFeatures(perClick));
+            dispatch(incrementBugs(features * Math.pow(0.9, bugsPerFeature)));
+            dispatch(incrementNumFeatureDevelopmentClicks(1));
+          }}
+          disabled={money < 1 || bugs > features}
+        >
+          Create game features
+        </Button>
+      </span>
+    </Tooltip>
+  );
+  const createHypeButton = (
+    <Tooltip
+      title={`-1 Money, +${roundPerSecond(perClick)} Hype${money === 0 ? " | Not enough money" : ""}`}
+    >
+      <span>
+        <Button
+          variant={"outlined"}
+          onClick={() => {
+            dispatch(incrementMoney(-1));
+            dispatch(incrementHype(perClick));
+          }}
+          disabled={money < 1}
+        >
+          Create Hype
+        </Button>
+      </span>
+    </Tooltip>
+  );
+  const releaseGameButton = (
+    <>
+      <div style={{ marginTop: "1rem" }}>
+        <Typography>
+          Projected additional earnings per second: {additionalMoneyPerSecond}
+        </Typography>
+        <Button
+          variant={"outlined"}
+          disabled={features <= 5 || bugs >= features || hype < features}
+          onClick={() => {
+            setGameNamingModalOpen(true);
+          }}
+        >
+          Release Game
+        </Button>
+      </div>
+    </>
+  );
   return (
     <>
       <Tooltip title={`+${roundPerSecond(perClick)} Money`}>
@@ -160,60 +235,14 @@ const MainTab = () => {
         </Button>
       </Tooltip>
       <Stack direction="row" spacing={4} style={{ marginTop: "1rem" }}>
-        <Tooltip
-          title={`-1 Money, +${roundPerSecond(perClick)} Feature, +${Math.round(features * Math.pow(0.9, bugsPerFeature))} Bugs${money === 0 ? " | Not enough money" : bugs > features ? " | Too many bugs" : ""}`}
-        >
-          <span>
-            <Button
-              variant={"outlined"}
-              onClick={() => {
-                dispatch(incrementMoney(-1));
-                dispatch(incrementFeatures(perClick));
-                dispatch(
-                  incrementBugs(features * Math.pow(0.9, bugsPerFeature)),
-                );
-                dispatch(incrementNumFeatureDevelopmentClicks(1));
-              }}
-              disabled={money < 1 || bugs > features}
-            >
-              Create game features
-            </Button>
-          </span>
-        </Tooltip>
-        <Tooltip
-          title={`-1 Money, -${roundPerSecond(perClick)} Bug${money < 1 ? " | Not enough money" : bugs === 0 ? " | No bugs to fix" : ""}`}
-        >
-          <span>
-            <Button
-              variant={"outlined"}
-              onClick={() => {
-                dispatch(incrementMoney(-1));
-                dispatch(incrementBugs(-1 * perClick));
-                dispatch(incrementNumBugFixClicks(1));
-              }}
-              disabled={money < 1 || bugs === 0}
-            >
-              Fix bugs
-            </Button>
-          </span>
-        </Tooltip>
+        {createFeaturesButton}
+        {fixBugsButton}
+        {createHypeButton}
       </Stack>
-      {(features > 5 && bugs < features) || releasedGames.length > 0 ? (
-        <div style={{ marginTop: "1rem" }}>
-          <Typography>
-            Projected additional earnings per second: {additionalMoneyPerSecond}
-          </Typography>
-          <Button
-            variant={"outlined"}
-            disabled={features <= 5 || bugs >= features}
-            onClick={() => {
-              setGameNamingModalOpen(true);
-            }}
-          >
-            Release Game
-          </Button>
-        </div>
-      ) : null}
+      {(features > 5 && bugs < features && hype >= features) ||
+      releasedGames.length > 0
+        ? releaseGameButton
+        : null}
 
       <div>
         <Typography level={"h4"} style={{ marginTop: "2rem" }}>

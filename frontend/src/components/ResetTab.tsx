@@ -19,6 +19,7 @@ import { resetClickingStrength } from "../slices/clickingStrengthSlice";
 import { resetOffice } from "../slices/officeSlice";
 import { resetAchievementsState } from "../slices/achievementsStateSlice";
 import { resetClicks } from "../slices/numClicksSlice";
+import { resetHype } from "../slices/hypeSlice";
 
 const ResetTab = () => {
   const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
@@ -32,6 +33,7 @@ const ResetTab = () => {
       resetOffice(),
       resetMoney(),
       resetBugs(),
+      resetHype(),
       resetFeatures(),
       resetBugFixerCost(),
       resetBugFixerProductivity(),

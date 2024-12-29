@@ -18,11 +18,19 @@ export const computeMoneyPerSecondForSingleGame = (
   gameStat: GameStats,
   gameProfitability: number,
 ) => {
-  return (
-    (Math.pow(gameStat.features, 1.15) / 100 -
-      Math.pow(gameStat.bugs, 1.5) / 100) *
-    Math.pow(1.1, gameProfitability)
-  );
+  const featureTerm = Math.pow(gameStat.features, 1.15) / 100;
+  const bugTerm = Math.pow(gameStat.bugs, 1.5) / 100;
+  const profitabilityMultiplier = Math.pow(1.1, gameProfitability);
+  const hypeMultiplier = Math.pow(1.03, gameStat.hype);
+  const funTerm = featureTerm - bugTerm;
+  const hypeTerm =
+    Math.pow(gameStat.hype, 0.5) > gameStat.features - gameStat.bugs
+      ? -0.9 * funTerm
+      : 0;
+  const multipliers = profitabilityMultiplier * hypeMultiplier;
+  const terms = funTerm + hypeTerm;
+
+  return terms * multipliers;
 };
 
 export const computeMoneyPerSecond = (
@@ -33,8 +41,10 @@ export const computeMoneyPerSecond = (
   let moneyPerSecondRaw = -1 * computeOfficeCostPerSecond(office);
   if (gameStats.length > 0) {
     moneyPerSecondRaw += sum(
-      gameStats.map((value) =>
-        computeMoneyPerSecondForSingleGame(value, gameProfitability),
+      gameStats.map(
+        (value, index) =>
+          computeMoneyPerSecondForSingleGame(value, gameProfitability) *
+          Math.pow(0.5, index),
       ),
     );
   }

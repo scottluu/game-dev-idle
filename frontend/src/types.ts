@@ -4,6 +4,7 @@ export type GameStats = {
   name: string;
   bugs: number;
   features: number;
+  hype: number;
 };
 
 export interface NumberState {

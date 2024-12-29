@@ -7,6 +7,7 @@ const GameStateSaver = () => {
 
   const money = useAppSelector((state) => state.money.value);
   const bugs = useAppSelector((state) => state.bugs.value);
+  const hype = useAppSelector((state) => state.hype.value);
   const features = useAppSelector((state) => state.features.value);
   const releasedGames = useAppSelector((state) => state.releasedGames.value);
 
@@ -52,6 +53,7 @@ const GameStateSaver = () => {
       const now = Date.now();
       if (now < lastSave + 5000) return;
       localStorage.setItem("bugs", bugs.toString());
+      localStorage.setItem("hype", hype.toString());
       localStorage.setItem("features", features.toString());
       localStorage.setItem("money", money.toString());
       localStorage.setItem("bugFixers", bugFixers.toString());
@@ -98,6 +100,7 @@ const GameStateSaver = () => {
   }, [
     bugFixers,
     bugs,
+    hype,
     featureDevelopers,
     features,
     money,

@@ -16,11 +16,13 @@ import { clickingStrengthReducer } from "./slices/clickingStrengthSlice";
 import { officeReducer } from "./slices/officeSlice";
 import { achievementsStateReducer } from "./slices/achievementsStateSlice";
 import { numClicksReducer } from "./slices/numClicksSlice";
+import { hypeReducer } from "./slices/hypeSlice";
 
 export const store = configureStore({
   reducer: {
     money: moneyReducer,
     bugs: bugsReducer,
+    hype: hypeReducer,
     features: featuresReducer,
     releasedGames: releasedGamesReducer,
     featureDevelopers: featureDevelopersReducer,

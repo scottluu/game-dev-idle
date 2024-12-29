@@ -76,7 +76,7 @@ export const StaticAchievementInfo = {
     icon: GiAbstract003,
   },
   buggyMess: {
-    text: "Have 8 times more bugs than features",
+    text: "Release a game with more bugs than features",
     icon: GiAbstract004,
   },
   bugOverflow: {

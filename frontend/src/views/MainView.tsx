@@ -23,6 +23,7 @@ import AchievementsManager from "../components/AchievementsManager";
 const MainView = () => {
   const money = useAppSelector((state) => state.money.value);
   const bugs = useAppSelector((state) => state.bugs.value);
+  const hype = useAppSelector((state) => state.hype.value);
   const bugFixers = useAppSelector((state) => state.bugFixers.value);
   const features = useAppSelector((state) => state.features.value);
   const featureDevelopers = useAppSelector(
@@ -80,6 +81,18 @@ const MainView = () => {
                 ? `(${roundPerSecond(featuresPerSecond)}/s)`
                 : null}
             </Typography>
+          </Stack>
+          <Stack
+            direction="row"
+            spacing={4}
+            sx={{ alignItems: "baseline", justifyContent: "space-between" }}
+          >
+            <Typography level={"h3"}>Hype: {Math.round(hype)}</Typography>
+            {/*<Typography>*/}
+            {/*  {featureDevelopers > 0*/}
+            {/*    ? `(${roundPerSecond(featuresPerSecond)}/s)`*/}
+            {/*    : null}*/}
+            {/*</Typography>*/}
           </Stack>
           <Stack
             direction="row"

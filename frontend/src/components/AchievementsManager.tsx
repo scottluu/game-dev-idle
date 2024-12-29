@@ -58,9 +58,8 @@ const AchievementsManager = () => {
 
   useEffect(() => {
     if (
-      features > 0 &&
-      bugs > 10 * features &&
-      achievementsState.buggyMess.achievedDate === null
+      achievementsState.buggyMess.achievedDate === null &&
+      releasedGames.find((value) => value.features < value.bugs)
     ) {
       dispatch(enableBuggyMess());
     }
