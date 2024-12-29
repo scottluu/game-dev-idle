@@ -44,6 +44,7 @@ import {
   incrementNumFeatureDevelopmentClicks,
 } from "../slices/numClicksSlice";
 import { incrementHype, resetHype } from "../slices/hypeSlice";
+import { resetMarketers } from "../slices/marketersSlice";
 
 const MainTab = () => {
   const specializationPoints = useSpecializationPoints();
@@ -102,6 +103,7 @@ const MainTab = () => {
       resetMoney(),
       resetFeatureDevelopers(),
       resetBugFixers(),
+      resetMarketers(),
       resetFeatures(),
       resetBugs(),
       resetHype(),

@@ -9,7 +9,7 @@ import useSpecializationPoints from "../hooks/useSpecializationPoints";
 import { Add, Remove } from "@mui/icons-material";
 import useAppSelector from "../hooks/useAppSelector";
 
-type CompanyNamingModal = {
+type CompanyNamingModalProps = {
   open: boolean;
   setOpen: (val: boolean) => void;
   companyName: string;
@@ -263,7 +263,7 @@ const SpecializationPointAssignmentSection = (
   );
 };
 
-const CompanyNamingModal = (props: CompanyNamingModal) => {
+const CompanyNamingModal = (props: CompanyNamingModalProps) => {
   return (
     <Modal open={props.open} onClose={() => props.setOpen(false)}>
       <ModalDialog>
