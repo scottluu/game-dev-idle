@@ -14,20 +14,34 @@ export const getBooleanWithDefault = (
     : defaultVal;
 };
 
+const computeFunTerm = (features: number, bugs: number) => {
+  const featureTerm = Math.pow(features, 1.15) / 100;
+  const bugTerm = Math.pow(bugs, 1.5) / 100;
+  return featureTerm - bugTerm;
+};
+export const computeHypePenalty = (
+  hype: number,
+  features: number,
+  bugs: number,
+) => {
+  return hype > (features - bugs) * 1.5
+    ? -0.9 * computeFunTerm(features, bugs)
+    : 0;
+};
+
 export const computeMoneyPerSecondForSingleGame = (
   gameStat: GameStats,
   gameProfitability: number,
   age: number,
 ) => {
-  const featureTerm = Math.pow(gameStat.features, 1.15) / 100;
-  const bugTerm = Math.pow(gameStat.bugs, 1.5) / 100;
   const profitabilityMultiplier = Math.pow(1.1, gameProfitability);
   const hypeMultiplier = Math.pow(1.03, gameStat.hype);
-  const funTerm = featureTerm - bugTerm;
-  const hypeTerm =
-    Math.pow(gameStat.hype, 0.25) > gameStat.features - gameStat.bugs
-      ? -0.9 * funTerm
-      : 0;
+  const funTerm = computeFunTerm(gameStat.features, gameStat.bugs);
+  const hypeTerm = computeHypePenalty(
+    gameStat.hype,
+    gameStat.features,
+    gameStat.bugs,
+  );
   const ageMultiplier = Math.pow(0.5, age);
   const multipliers = profitabilityMultiplier * hypeMultiplier * ageMultiplier;
   const terms = funTerm + hypeTerm;

@@ -13,6 +13,7 @@ import GameNamingModal from "./GameNamingModal";
 import {
   computeBugFixersRequirement,
   computeFeatureDevelopersRequirement,
+  computeHypePenalty,
   computeMoneyPerSecondForSingleGame,
   computeMoneyPerSecondRequirement,
   computeMoneyRequirement,
@@ -190,7 +191,7 @@ const MainTab = () => {
       </span>
     </Tooltip>
   );
-  const hypeCost = roundMoney(Math.pow(hype * features, 0.75));
+  const hypeCost = roundMoney(Math.pow(hype * (features + 1), 0.75));
   const createHypeButton = (
     <Tooltip
       title={`-${hypeCost} Money, +${roundPerSecond(perClick)} Hype${money === 0 ? " | Not enough money" : ""}`}
@@ -221,6 +222,11 @@ const MainTab = () => {
       <div style={{ marginTop: "1rem" }}>
         <Typography>
           Projected additional earnings per second: {additionalMoneyPerSecond}
+        </Typography>
+        <Typography color={"danger"}>
+          {Math.abs(computeHypePenalty(hype, features, bugs)) > 0
+            ? "WARNING: Hype penalty in effect"
+            : null}
         </Typography>
         <Button
           variant={"outlined"}
