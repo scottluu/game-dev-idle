@@ -18,7 +18,7 @@ const ReleasedGamesTab = () => {
         </tr>
       </thead>
       <tbody>
-        {releasedGames.map((releasedGame) => {
+        {releasedGames.map((releasedGame, index) => {
           return (
             <tr>
               <td>
@@ -33,6 +33,7 @@ const ReleasedGamesTab = () => {
                   computeMoneyPerSecondForSingleGame(
                     releasedGame,
                     gameProfitability,
+                    releasedGames.length - index - 1,
                   ),
                 )}
               </td>

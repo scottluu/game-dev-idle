@@ -144,6 +144,7 @@ const MainTab = () => {
     computeMoneyPerSecondForSingleGame(
       { bugs, features, name: "", hype },
       gameProfitability,
+      0,
     ),
   );
   const moneyPerSecond = useMoneyPerSecond();
@@ -187,7 +188,7 @@ const MainTab = () => {
       </span>
     </Tooltip>
   );
-  const hypeCost = Math.pow(hype * features, 0.75);
+  const hypeCost = roundMoney(Math.pow(hype * features, 0.75));
   const createHypeButton = (
     <Tooltip
       title={`-${hypeCost} Money, +${roundPerSecond(perClick)} Hype${money === 0 ? " | Not enough money" : ""}`}
@@ -214,7 +215,7 @@ const MainTab = () => {
         </Typography>
         <Button
           variant={"outlined"}
-          disabled={features <= 5 || bugs >= 2 * features || hype < features}
+          disabled={features <= 4 || bugs >= 2 * features || hype < features}
           onClick={() => {
             setGameNamingModalOpen(true);
           }}
@@ -243,14 +244,14 @@ const MainTab = () => {
         {createHypeButton}
       </Stack>
       <Stack direction="column" spacing={2} style={{ marginTop: "1rem" }}>
-        <Typography color={features > 5 ? "success" : "danger"}>
-          {features}/5 features
+        <Typography color={features > 4 ? "success" : "danger"}>
+          {Math.round(features)}/5 features
         </Typography>
         <Typography color={bugs < 2 * features ? "success" : "danger"}>
-          Max bugs: {2 * features}
+          Max bugs: {Math.round(2 * features)}
         </Typography>
         <Typography color={hype >= features ? "success" : "danger"}>
-          Required hype: {features}
+          {Math.round(hype)}/{Math.round(features)} Hype
         </Typography>
         {releaseGameButton}
       </Stack>

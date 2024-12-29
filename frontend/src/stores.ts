@@ -17,6 +17,8 @@ import { officeReducer } from "./slices/officeSlice";
 import { achievementsStateReducer } from "./slices/achievementsStateSlice";
 import { numClicksReducer } from "./slices/numClicksSlice";
 import { hypeReducer } from "./slices/hypeSlice";
+import { marketerReducer } from "./slices/marketersSlice";
+import { marketerCostReducer } from "./slices/marketerCostSlice";
 
 export const store = configureStore({
   reducer: {
@@ -27,8 +29,10 @@ export const store = configureStore({
     releasedGames: releasedGamesReducer,
     featureDevelopers: featureDevelopersReducer,
     bugFixers: bugFixersReducer,
+    marketers: marketerReducer,
     soldCompanies: soldCompaniesReducer,
     bugFixerCost: bugFixerCostReducer,
+    marketerCost: marketerCostReducer,
     bugFixerProductivity: bugFixerProductivityReducer,
     bugsPerFeature: bugsPerFeatureReducer,
     featureDeveloperCost: featureDeveloperCostReducer,

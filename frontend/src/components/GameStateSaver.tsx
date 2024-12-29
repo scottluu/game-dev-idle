@@ -32,6 +32,9 @@ const GameStateSaver = () => {
     (state) => state.bugFixerProductivity.value,
   );
   const bugFixerCost = useAppSelector((state) => state.bugFixerCost.value);
+  const marketers = useAppSelector((state) => state.marketers.value);
+  const marketersCost = useAppSelector((state) => state.marketerCost.value);
+  const marketersEnabled = useAppSelector((state) => state.marketers.enabled);
 
   const gameProfitability = useAppSelector(
     (state) => state.gameProfitability.value,
@@ -57,6 +60,8 @@ const GameStateSaver = () => {
       localStorage.setItem("features", features.toString());
       localStorage.setItem("money", money.toString());
       localStorage.setItem("bugFixers", bugFixers.toString());
+      localStorage.setItem("marketers", marketers.toString());
+      localStorage.setItem("marketers.enabled", marketersEnabled.toString());
       localStorage.setItem("bugFixers.enabled", bugFixersEnabled.toString());
       localStorage.setItem(
         "bugFixerProductivity",
@@ -99,6 +104,9 @@ const GameStateSaver = () => {
     return () => clearInterval(interval);
   }, [
     bugFixers,
+    marketersCost,
+    marketers,
+    marketersEnabled,
     bugs,
     hype,
     featureDevelopers,

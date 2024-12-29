@@ -6,11 +6,14 @@ import { incrementMoney } from "../slices/moneySlice";
 import useMoneyPerSecond from "../hooks/useMoneyPerSecond";
 import useBugsPerSecond from "../hooks/useBugsPerSecond";
 import useFeaturesPerSecond from "../hooks/useFeaturesPerSecond";
+import { incrementHype } from "../slices/hypeSlice";
+import useHypePerSecond from "../hooks/useHypePerSecond";
 
 const GameStateManager = () => {
   const dispatch = useAppDispatch();
   const moneyPerSecond = useMoneyPerSecond();
   const bugsPerSecond = useBugsPerSecond();
+  const hypePerSecond = useHypePerSecond();
   const featuresPerSecond = useFeaturesPerSecond();
   const [lastUpdate, setLastUpdate] = useState(Date.now());
 
@@ -19,8 +22,15 @@ const GameStateManager = () => {
     dispatch(incrementBugs(bugsPerSecond * multiplier));
     dispatch(incrementFeatures(featuresPerSecond * multiplier));
     dispatch(incrementMoney(moneyPerSecond * multiplier));
+    dispatch(incrementHype(hypePerSecond * multiplier));
     setLastUpdate(Date.now());
-  }, [moneyPerSecond, bugsPerSecond, featuresPerSecond, lastUpdate]);
+  }, [
+    moneyPerSecond,
+    bugsPerSecond,
+    featuresPerSecond,
+    hypePerSecond,
+    lastUpdate,
+  ]);
 
   useEffect(() => {
     const interval3 = setInterval(update, 1000);

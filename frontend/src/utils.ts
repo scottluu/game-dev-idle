@@ -17,6 +17,7 @@ export const getBooleanWithDefault = (
 export const computeMoneyPerSecondForSingleGame = (
   gameStat: GameStats,
   gameProfitability: number,
+  age: number,
 ) => {
   const featureTerm = Math.pow(gameStat.features, 1.15) / 100;
   const bugTerm = Math.pow(gameStat.bugs, 1.5) / 100;
@@ -27,7 +28,8 @@ export const computeMoneyPerSecondForSingleGame = (
     Math.pow(gameStat.hype, 0.25) > gameStat.features - gameStat.bugs
       ? -0.9 * funTerm
       : 0;
-  const multipliers = profitabilityMultiplier * hypeMultiplier;
+  const ageMultiplier = Math.pow(0.5, age);
+  const multipliers = profitabilityMultiplier * hypeMultiplier * ageMultiplier;
   const terms = funTerm + hypeTerm;
 
   return terms * multipliers;
@@ -37,17 +39,29 @@ export const computeMoneyPerSecond = (
   gameStats: GameStats[],
   gameProfitability: number,
   office: number,
+  marketers: number,
+  isMarketersEnabled: boolean,
+  hype: number,
 ) => {
-  let moneyPerSecondRaw = -1 * computeOfficeCostPerSecond(office);
+  let revenue = 0;
+  let expenses =
+    computeOfficeCostPerSecond(office) +
+    computeHypePerSecond(marketers, isMarketersEnabled);
+  if (isMarketersEnabled && marketers > 0) {
+    expenses += Math.pow(hype, 0.5);
+  }
   if (gameStats.length > 0) {
-    moneyPerSecondRaw += sum(
-      gameStats.map(
-        (value, index) =>
-          computeMoneyPerSecondForSingleGame(value, gameProfitability) *
-          Math.pow(0.5, index),
+    revenue += sum(
+      gameStats.map((value, index) =>
+        computeMoneyPerSecondForSingleGame(
+          value,
+          gameProfitability,
+          gameStats.length - index - 1,
+        ),
       ),
     );
   }
+  const moneyPerSecondRaw = revenue - expenses;
 
   const moneyPerSecondAsCents = moneyPerSecondRaw * 100;
 
@@ -156,4 +170,12 @@ export const computeFeatureDevelopersRequirement = (
     Math.pow(1.0625, specializationPoints) +
       Math.pow(specializationPoints, 1.0625),
   );
+};
+
+export const computeHypePerSecond = (
+  marketers: number,
+  isMarketersEnabled: boolean,
+) => {
+  if (!isMarketersEnabled) return 0;
+  return Math.pow(marketers, 0.5);
 };

@@ -20,6 +20,8 @@ import { resetOffice } from "../slices/officeSlice";
 import { resetAchievementsState } from "../slices/achievementsStateSlice";
 import { resetClicks } from "../slices/numClicksSlice";
 import { resetHype } from "../slices/hypeSlice";
+import { resetMarketerCost } from "../slices/marketerCostSlice";
+import { resetMarketers } from "../slices/marketersSlice";
 
 const ResetTab = () => {
   const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
@@ -34,6 +36,8 @@ const ResetTab = () => {
       resetMoney(),
       resetBugs(),
       resetHype(),
+      resetMarketerCost(),
+      resetMarketers(),
       resetFeatures(),
       resetBugFixerCost(),
       resetBugFixerProductivity(),

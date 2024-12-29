@@ -19,12 +19,15 @@ import OfflineLoader from "../components/OfflineLoader";
 import useLocalStorage from "../hooks/UseLocalStorage";
 import AchievementsTab from "../components/AchievementsTab";
 import AchievementsManager from "../components/AchievementsManager";
+import useHypePerSecond from "../hooks/useHypePerSecond";
 
 const MainView = () => {
   const money = useAppSelector((state) => state.money.value);
   const bugs = useAppSelector((state) => state.bugs.value);
   const hype = useAppSelector((state) => state.hype.value);
   const bugFixers = useAppSelector((state) => state.bugFixers.value);
+  const hypePerSecond = useHypePerSecond();
+  const marketers = useAppSelector((state) => state.marketers.value);
   const features = useAppSelector((state) => state.features.value);
   const featureDevelopers = useAppSelector(
     (state) => state.featureDevelopers.value,
@@ -88,11 +91,9 @@ const MainView = () => {
             sx={{ alignItems: "baseline", justifyContent: "space-between" }}
           >
             <Typography level={"h3"}>Hype: {Math.round(hype)}</Typography>
-            {/*<Typography>*/}
-            {/*  {featureDevelopers > 0*/}
-            {/*    ? `(${roundPerSecond(featuresPerSecond)}/s)`*/}
-            {/*    : null}*/}
-            {/*</Typography>*/}
+            <Typography>
+              {marketers > 0 ? `(${roundPerSecond(hypePerSecond)}/s)` : null}
+            </Typography>
           </Stack>
           <Stack
             direction="row"

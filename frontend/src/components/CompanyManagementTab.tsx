@@ -12,6 +12,7 @@ import { Radio } from "@mui/joy";
 import { incrementOffice } from "../slices/officeSlice";
 import useMoneyPerSecond from "../hooks/useMoneyPerSecond";
 import { computeOfficeCostPerSecond, roundPerSecond } from "../utils";
+import { incrementMarketers, toggleMarketers } from "../slices/marketersSlice";
 
 const computeCost = (
   currentAmount: number,
@@ -44,6 +45,7 @@ const computeRefund = (
 
 const BUG_FIXER_MULTIPLIER = 2;
 const FEATURE_DEVELOPER_MULTIPLIER = 3;
+const MARKETER_MULTIPLIER = 4;
 
 type Props = {
   hireAmount: number;
@@ -54,16 +56,19 @@ type BugFixersRowProps = {
   hireAmount: number;
 };
 
-const useHasMoreOfficeSpace = (props: { hireAmount: number }) => {
+const useHeadCount = () => {
   const bugFixers = useAppSelector((state) => state.bugFixers.value);
   const featureDevelopers = useAppSelector(
     (state) => state.featureDevelopers.value,
   );
+  const marketers = useAppSelector((state) => state.marketers.value);
+  return bugFixers + featureDevelopers + marketers;
+};
+
+const useHasMoreOfficeSpace = (props: { hireAmount: number }) => {
+  const headCount = useHeadCount();
   const office = useAppSelector((state) => state.office.value);
-  return (
-    bugFixers + featureDevelopers + props.hireAmount <=
-    computeOfficeCapacity(office)
-  );
+  return headCount + props.hireAmount <= computeOfficeCapacity(office);
 };
 
 const BugFixersRow = ({ hireAmount }: BugFixersRowProps) => {
@@ -149,6 +154,101 @@ const BugFixersRow = ({ hireAmount }: BugFixersRowProps) => {
                 onClick={() => {
                   dispatch(incrementMoney(-1 * bugFixerCostAmount));
                   dispatch(incrementBugFixers(hireAmount));
+                }}
+              >
+                <Add />
+              </IconButton>
+            </div>
+          </Tooltip>
+        </div>
+      </Stack>
+    </>
+  );
+};
+
+const MarketersRow = ({ hireAmount }: BugFixersRowProps) => {
+  const dispatch = useAppDispatch();
+  const isMarketersPaused = useAppSelector((state) => !state.marketers.enabled);
+  const marketersCost = useAppSelector((state) => state.marketerCost.value);
+  const marketers = useAppSelector((state) => state.marketers.value);
+  const money = useAppSelector((state) => state.money.value);
+
+  const hasMoreOfficeSpace = useHasMoreOfficeSpace({ hireAmount });
+
+  const marketersRefund = computeRefund(
+    marketers,
+    hireAmount,
+    MARKETER_MULTIPLIER,
+    marketersCost,
+  );
+  const marketerCostAmount = computeCost(
+    marketers,
+    hireAmount,
+    MARKETER_MULTIPLIER,
+    marketersCost,
+  );
+  const canHire = money >= marketerCostAmount && hasMoreOfficeSpace;
+  const canFire = marketers >= hireAmount;
+
+  let whyCannotHire = "";
+  if (!canHire) {
+    if (money < marketerCostAmount) {
+      whyCannotHire = ` | Need at least $${marketerCostAmount}`;
+    } else {
+      whyCannotHire = " | Not enough office space";
+    }
+  }
+  let whyCannotFire = "";
+  if (!canFire) {
+    whyCannotFire = " | Not enough marketers to fire";
+  }
+
+  return (
+    <>
+      <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+        <Typography>Off</Typography>
+        <Switch
+          checked={!isMarketersPaused}
+          onChange={() => dispatch(toggleMarketers())}
+        />
+        <Typography>On</Typography>
+      </Stack>
+      <Stack
+        direction={"row"}
+        spacing={2}
+        sx={{
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <div>
+          <Tooltip
+            title={`+${marketersRefund} Money, -${hireAmount} Marketers${whyCannotFire}`}
+          >
+            <div>
+              <IconButton
+                disabled={!canFire}
+                onClick={() => {
+                  dispatch(incrementMarketers(-1 * hireAmount));
+                  dispatch(incrementMoney(marketersRefund));
+                }}
+              >
+                <Remove />
+              </IconButton>
+            </div>
+          </Tooltip>
+        </div>
+        <Typography>Marketers: {marketers}</Typography>
+        <div>
+          <Tooltip
+            title={`-${marketerCostAmount} Money, +${hireAmount} Marketers${whyCannotHire}`}
+          >
+            <div>
+              <IconButton
+                disabled={!canHire}
+                onClick={() => {
+                  dispatch(incrementMoney(-1 * marketerCostAmount));
+                  dispatch(incrementMarketers(hireAmount));
                 }}
               >
                 <Add />
@@ -269,10 +369,7 @@ const OfficesRow = ({ hireAmount }: { hireAmount: number }) => {
   const dispatch = useAppDispatch();
 
   const office = useAppSelector((state) => state.office.value);
-  const featureDevelopers = useAppSelector(
-    (state) => state.featureDevelopers.value,
-  );
-  const bugFixers = useAppSelector((state) => state.bugFixers.value);
+
   const moneyPerSecond = useMoneyPerSecond();
 
   const increasedOfficeCost =
@@ -291,7 +388,7 @@ const OfficesRow = ({ hireAmount }: { hireAmount: number }) => {
 
   let whyCannotDecrease = "";
   let canDecreaseOffices = true;
-  const headCount = bugFixers + featureDevelopers;
+  const headCount = useHeadCount();
   if (computeOfficeCapacity(office - hireAmount) < headCount) {
     whyCannotDecrease = ` | Need space for ${headCount} employees, fire some first!`;
     canDecreaseOffices = false;
@@ -370,6 +467,7 @@ const CompanyManagementTab = ({ hireAmount, setHireAmount }: Props) => {
       </Stack>
       <BugFixersRow hireAmount={hireAmount} />
       <FeatureDevelopersRow hireAmount={hireAmount} />
+      <MarketersRow hireAmount={hireAmount} />
       <OfficesRow hireAmount={hireAmount} />
     </>
   );
