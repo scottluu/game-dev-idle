@@ -43,7 +43,7 @@ import {
   incrementNumBugFixClicks,
   incrementNumFeatureDevelopmentClicks,
 } from "../slices/numClicksSlice";
-import { incrementHype } from "../slices/hypeSlice";
+import { incrementHype, resetHype } from "../slices/hypeSlice";
 
 const MainTab = () => {
   const specializationPoints = useSpecializationPoints();
@@ -90,6 +90,7 @@ const MainTab = () => {
     );
     dispatchables.push(resetFeatures());
     dispatchables.push(resetBugs());
+    dispatchables.push(resetHype());
     dispatchables.forEach((value) => dispatch(value));
     setGameName("");
     setGameNamingModalOpen(false);
@@ -103,6 +104,7 @@ const MainTab = () => {
       resetBugFixers(),
       resetFeatures(),
       resetBugs(),
+      resetHype(),
       incrementBugFixerCost(specializationPointAssignment.bugFixerCost),
       incrementBugFixerProductivity(
         specializationPointAssignment.bugFixerProductivity,
@@ -211,7 +213,7 @@ const MainTab = () => {
         </Typography>
         <Button
           variant={"outlined"}
-          disabled={features <= 5 || bugs >= features || hype < features}
+          disabled={features <= 5 || bugs >= 2 * features || hype < features}
           onClick={() => {
             setGameNamingModalOpen(true);
           }}
@@ -239,7 +241,7 @@ const MainTab = () => {
         {fixBugsButton}
         {createHypeButton}
       </Stack>
-      {(features > 5 && bugs < features && hype >= features) ||
+      {(features > 5 && bugs < 2 * features && hype >= features) ||
       releasedGames.length > 0
         ? releaseGameButton
         : null}
