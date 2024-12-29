@@ -187,18 +187,19 @@ const MainTab = () => {
       </span>
     </Tooltip>
   );
+  const hypeCost = Math.pow(hype * features, 0.75);
   const createHypeButton = (
     <Tooltip
-      title={`-1 Money, +${roundPerSecond(perClick)} Hype${money === 0 ? " | Not enough money" : ""}`}
+      title={`-${hypeCost} Money, +${roundPerSecond(perClick)} Hype${money === 0 ? " | Not enough money" : ""}`}
     >
       <span>
         <Button
           variant={"outlined"}
           onClick={() => {
-            dispatch(incrementMoney(-1));
+            dispatch(incrementMoney(-1 * hypeCost));
             dispatch(incrementHype(perClick));
           }}
-          disabled={money < 1}
+          disabled={money < hypeCost}
         >
           Create Hype
         </Button>
@@ -241,10 +242,18 @@ const MainTab = () => {
         {fixBugsButton}
         {createHypeButton}
       </Stack>
-      {(features > 5 && bugs < 2 * features && hype >= features) ||
-      releasedGames.length > 0
-        ? releaseGameButton
-        : null}
+      <Stack direction="column" spacing={2} style={{ marginTop: "1rem" }}>
+        <Typography color={features > 5 ? "success" : "danger"}>
+          {features}/5 features
+        </Typography>
+        <Typography color={bugs < 2 * features ? "success" : "danger"}>
+          Max bugs: {2 * features}
+        </Typography>
+        <Typography color={hype >= features ? "success" : "danger"}>
+          Required hype: {features}
+        </Typography>
+        {releaseGameButton}
+      </Stack>
 
       <div>
         <Typography level={"h4"} style={{ marginTop: "2rem" }}>

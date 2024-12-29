@@ -24,7 +24,7 @@ export const computeMoneyPerSecondForSingleGame = (
   const hypeMultiplier = Math.pow(1.03, gameStat.hype);
   const funTerm = featureTerm - bugTerm;
   const hypeTerm =
-    Math.pow(gameStat.hype, 0.5) > gameStat.features - gameStat.bugs
+    Math.pow(gameStat.hype, 0.25) > gameStat.features - gameStat.bugs
       ? -0.9 * funTerm
       : 0;
   const multipliers = profitabilityMultiplier * hypeMultiplier;
