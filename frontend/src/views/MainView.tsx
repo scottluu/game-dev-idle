@@ -67,8 +67,8 @@ const MainView = () => {
             sx={{ alignItems: "baseline", justifyContent: "space-between" }}
           >
             <Typography level={"h1"}>${Math.round(money)}</Typography>
-            <Typography>
-              {moneyPerSecond > 0 ? `($${moneyPerSecond}/s)` : null}
+            <Typography color={moneyPerSecond > 0 ? undefined : "danger"}>
+              {Math.abs(moneyPerSecond) > 0 ? `($${moneyPerSecond}/s)` : null}
             </Typography>
           </Stack>
           <Stack

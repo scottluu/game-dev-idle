@@ -207,6 +207,13 @@ const MainTab = () => {
       </span>
     </Tooltip>
   );
+  const hasEnoughFeaturesToRelease = features > 4;
+  const hasTooMuchBugsToRelease = bugs > 2 * features;
+  const hasEnoughHypeToRelease = hype >= features;
+  const canRelease =
+    hasEnoughFeaturesToRelease &&
+    !hasTooMuchBugsToRelease &&
+    hasEnoughHypeToRelease;
   const releaseGameButton = (
     <>
       <div style={{ marginTop: "1rem" }}>
@@ -215,7 +222,7 @@ const MainTab = () => {
         </Typography>
         <Button
           variant={"outlined"}
-          disabled={features <= 4 || bugs >= 2 * features || hype < features}
+          disabled={!canRelease}
           onClick={() => {
             setGameNamingModalOpen(true);
           }}
@@ -225,6 +232,7 @@ const MainTab = () => {
       </div>
     </>
   );
+
   return (
     <>
       <Tooltip title={`+${roundPerSecond(perClick)} Money`}>
@@ -244,13 +252,13 @@ const MainTab = () => {
         {createHypeButton}
       </Stack>
       <Stack direction="column" spacing={2} style={{ marginTop: "1rem" }}>
-        <Typography color={features > 4 ? "success" : "danger"}>
+        <Typography color={hasEnoughFeaturesToRelease ? "success" : "danger"}>
           {Math.round(features)}/5 features
         </Typography>
-        <Typography color={bugs < 2 * features ? "success" : "danger"}>
+        <Typography color={!hasTooMuchBugsToRelease ? "success" : "danger"}>
           Max bugs: {Math.round(2 * features)}
         </Typography>
-        <Typography color={hype >= features ? "success" : "danger"}>
+        <Typography color={hasEnoughHypeToRelease ? "success" : "danger"}>
           {Math.round(hype)}/{Math.round(features)} Hype
         </Typography>
         {releaseGameButton}
