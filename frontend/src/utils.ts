@@ -131,18 +131,29 @@ export const sum = (numbers: number[]) => {
 };
 
 export const computeMoneyRequirement = (specializationPoints: number) => {
-  return Math.pow(1.5, specializationPoints);
+  return (
+    Math.pow(1.25, specializationPoints) + Math.pow(specializationPoints, 1.25)
+  );
 };
 export const computeMoneyPerSecondRequirement = (
   specializationPoints: number,
 ) => {
-  return Math.pow(1.25, specializationPoints);
+  return (
+    Math.pow(1.125, specializationPoints) +
+    Math.pow(specializationPoints, 1.125)
+  );
 };
 export const computeBugFixersRequirement = (specializationPoints: number) => {
-  return Math.round(Math.pow(1.25, specializationPoints));
+  return Math.round(
+    Math.pow(1.125, specializationPoints) +
+      Math.pow(specializationPoints, 1.125),
+  );
 };
 export const computeFeatureDevelopersRequirement = (
   specializationPoints: number,
 ) => {
-  return Math.round(Math.pow(1.125, specializationPoints));
+  return Math.round(
+    Math.pow(1.0625, specializationPoints) +
+      Math.pow(specializationPoints, 1.0625),
+  );
 };
