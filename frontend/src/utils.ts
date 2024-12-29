@@ -42,12 +42,16 @@ export const computeMoneyPerSecond = (
   marketers: number,
   isMarketersEnabled: boolean,
   hype: number,
+  money: number,
 ) => {
   let revenue = 0;
-  let expenses =
-    computeOfficeCostPerSecond(office) +
-    computeHypePerSecond(marketers, isMarketersEnabled);
-  if (isMarketersEnabled && marketers > 0) {
+  const hypePerSecond = computeHypePerSecond(
+    marketers,
+    isMarketersEnabled,
+    money,
+  );
+  let expenses = computeOfficeCostPerSecond(office) + hypePerSecond;
+  if (hypePerSecond > 0) {
     expenses += Math.pow(hype, 0.5);
   }
   if (gameStats.length > 0) {
@@ -175,7 +179,9 @@ export const computeFeatureDevelopersRequirement = (
 export const computeHypePerSecond = (
   marketers: number,
   isMarketersEnabled: boolean,
+  money: number,
 ) => {
+  if (money <= 0) return 0;
   if (!isMarketersEnabled) return 0;
   return Math.pow(marketers, 0.5);
 };
