@@ -7,6 +7,10 @@ const useMoneyPerSecond = () => {
   const hype = useAppSelector((state) => state.hype.value);
   const money = useAppSelector((state) => state.money.value);
   const marketers = useAppSelector((state) => state.marketers.value);
+  const featureDevelopers = useAppSelector(
+    (state) => state.featureDevelopers.value,
+  );
+  const bugFixers = useAppSelector((state) => state.bugFixers.value);
   const isMarketersEnabled = useAppSelector((state) => state.marketers.enabled);
   const gameProfitability = useAppSelector(
     (state) => state.gameProfitability.value,
@@ -20,6 +24,8 @@ const useMoneyPerSecond = () => {
     isMarketersEnabled,
     hype,
     money,
+    featureDevelopers,
+    bugFixers,
   );
 };
 

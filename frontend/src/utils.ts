@@ -38,7 +38,7 @@ export const computeMoneyPerSecondForSingleGame = (
   age: number,
 ) => {
   const profitabilityMultiplier = Math.pow(1.1, gameProfitability);
-  const hypeMultiplier = Math.pow(1.03, gameStat.hype);
+  const hypeMultiplier = Math.pow(gameStat.hype, 0.1) + 1;
   const funTerm = computeFunTerm(gameStat.features, gameStat.bugs);
   const hypeTerm = computeHypePenalty(
     gameStat.hype,
@@ -60,6 +60,8 @@ export const computeMoneyPerSecond = (
   isMarketersEnabled: boolean,
   hype: number,
   money: number,
+  featureDevelopers: number,
+  bugFixers: number,
 ) => {
   let revenue = 0;
   const hypePerSecond = computeHypePerSecond(
@@ -67,8 +69,11 @@ export const computeMoneyPerSecond = (
     isMarketersEnabled,
     money,
   );
-  let expenses =
-    computeOfficeCostPerSecond(office) + Math.pow(hypePerSecond, 2);
+  const marketersCost = Math.pow(hypePerSecond, 2);
+  const featureDeveloperCost = Math.pow(featureDevelopers, 2);
+  const bugFixerCost = Math.pow(bugFixers, 1.5);
+  const payroll = marketersCost + featureDeveloperCost + bugFixerCost;
+  let expenses = computeOfficeCostPerSecond(office) + payroll;
   if (hypePerSecond > 0) {
     expenses += Math.pow(hype, 0.75);
   }
