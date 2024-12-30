@@ -46,6 +46,7 @@ import {
 } from "../slices/numClicksSlice";
 import { incrementHype, resetHype } from "../slices/hypeSlice";
 import { resetMarketers } from "../slices/marketersSlice";
+import { resetAccountants } from "../slices/accountantsSlice";
 
 const MainTab = () => {
   const specializationPoints = useSpecializationPoints();
@@ -104,6 +105,7 @@ const MainTab = () => {
       resetMoney(),
       resetFeatureDevelopers(),
       resetBugFixers(),
+      resetAccountants(),
       resetMarketers(),
       resetFeatures(),
       resetBugs(),
@@ -227,7 +229,7 @@ const MainTab = () => {
     <>
       <div style={{ marginTop: "1rem" }}>
         <Typography>
-          Projected additional earnings per second: {additionalMoneyPerSecond}
+          Projected additional REVENUE per second: {additionalMoneyPerSecond}
         </Typography>
         <Typography color={"danger"}>
           {Math.abs(computeHypePenalty(hype, features, bugs)) > 0

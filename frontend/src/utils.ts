@@ -52,6 +52,39 @@ export const computeMoneyPerSecondForSingleGame = (
   return terms * multipliers;
 };
 
+export const computeRevenueFromGameSales = (
+  gameStats: GameStats[],
+  gameProfitability: number,
+) => {
+  let revenue = 0;
+  if (gameStats.length > 0) {
+    revenue += sum(
+      gameStats.map((value, index) =>
+        computeMoneyPerSecondForSingleGame(
+          value,
+          gameProfitability,
+          gameStats.length - index - 1,
+        ),
+      ),
+    );
+  }
+  return revenue;
+};
+
+export const computePayrollExpense = (
+  hypePerSecond: number,
+  featureDevelopers: number,
+  bugFixers: number,
+) => {
+  const marketersCost = Math.pow(hypePerSecond, 2);
+  const featureDeveloperCost = Math.pow(featureDevelopers, 2);
+  const bugFixerCost = Math.pow(bugFixers, 1.5);
+  return marketersCost + featureDeveloperCost + bugFixerCost;
+};
+
+export const computeIncomeTax = (revenue: number, accountants: number) =>
+  Math.max(0, revenue * 0.5 - accountants);
+
 export const computeMoneyPerSecond = (
   gameStats: GameStats[],
   gameProfitability: number,
@@ -65,7 +98,6 @@ export const computeMoneyPerSecond = (
   accountants: number,
   features: number,
 ) => {
-  let revenue = 0;
   const hypePerSecond = computeHypePerSecond(
     marketers,
     isMarketersEnabled,
@@ -73,26 +105,17 @@ export const computeMoneyPerSecond = (
     features,
     hype,
   );
-  const marketersCost = Math.pow(hypePerSecond, 2);
-  const featureDeveloperCost = Math.pow(featureDevelopers, 2);
-  const bugFixerCost = Math.pow(bugFixers, 1.5);
-  const payroll = marketersCost + featureDeveloperCost + bugFixerCost;
+  const payroll = computePayrollExpense(
+    hypePerSecond,
+    featureDevelopers,
+    bugFixers,
+  );
   let expenses = computeOfficeCostPerSecond(office) + payroll;
   if (hypePerSecond > 0) {
     expenses += Math.pow(hype, 0.75);
   }
-  if (gameStats.length > 0) {
-    revenue += sum(
-      gameStats.map((value, index) =>
-        computeMoneyPerSecondForSingleGame(
-          value,
-          gameProfitability,
-          gameStats.length - index - 1,
-        ),
-      ),
-    );
-  }
-  const taxes = Math.max(0, revenue * 0.5 - accountants);
+  const revenue = computeRevenueFromGameSales(gameStats, gameProfitability);
+  const taxes = computeIncomeTax(revenue, accountants);
   expenses += taxes;
   const moneyPerSecondRaw = revenue - expenses;
 

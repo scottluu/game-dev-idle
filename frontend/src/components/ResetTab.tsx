@@ -22,6 +22,7 @@ import { resetClicks } from "../slices/numClicksSlice";
 import { resetHype } from "../slices/hypeSlice";
 import { resetMarketerCost } from "../slices/marketerCostSlice";
 import { resetMarketers } from "../slices/marketersSlice";
+import { resetAccountants } from "../slices/accountantsSlice";
 
 const ResetTab = () => {
   const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
@@ -31,6 +32,7 @@ const ResetTab = () => {
       resetSoldCompanies(),
       resetReleasedGames(),
       resetBugFixers(),
+      resetAccountants(),
       resetFeatureDevelopers(),
       resetOffice(),
       resetMoney(),

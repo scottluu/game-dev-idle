@@ -20,6 +20,7 @@ import useLocalStorage from "../hooks/UseLocalStorage";
 import AchievementsTab from "../components/AchievementsTab";
 import AchievementsManager from "../components/AchievementsManager";
 import useHypePerSecond from "../hooks/useHypePerSecond";
+import FinancialTab from "../components/FinancialTab";
 
 const MainView = () => {
   const money = useAppSelector((state) => state.money.value);
@@ -114,6 +115,7 @@ const MainView = () => {
           <Tab>Main</Tab>
           <Tab>Company Management</Tab>
           <Tab>Released Games</Tab>
+          <Tab>Financials</Tab>
           <Tab>Achievements</Tab>
           <Tab>Reset</Tab>
         </TabList>
@@ -139,9 +141,16 @@ const MainView = () => {
           )}
         </TabPanel>
         <TabPanel value={3}>
-          <AchievementsTab />
+          {releasedGames.length > 0 ? (
+            <FinancialTab />
+          ) : (
+            <Typography>Release one game first!</Typography>
+          )}
         </TabPanel>
         <TabPanel value={4}>
+          <AchievementsTab />
+        </TabPanel>
+        <TabPanel value={5}>
           <ResetTab />
         </TabPanel>
       </Tabs>
