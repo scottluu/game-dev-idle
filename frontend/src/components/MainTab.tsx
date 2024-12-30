@@ -152,39 +152,41 @@ const MainTab = () => {
   );
   const moneyPerSecond = useMoneyPerSecond();
   const perClick = Math.pow(1.3, clickingStrength);
+  const bugFixCost = roundMoney(Math.pow(features, 0.5));
   const fixBugsButton = (
     <Tooltip
-      title={`-1 Money, -${roundPerSecond(perClick)} Bug${money < 1 ? " | Not enough money" : bugs === 0 ? " | No bugs to fix" : ""}`}
+      title={`-${bugFixCost} Money, -${roundPerSecond(perClick)} Bug${money < 1 ? " | Not enough money" : bugs === 0 ? " | No bugs to fix" : ""}`}
     >
       <span>
         <Button
           variant={"outlined"}
           onClick={() => {
-            dispatch(incrementMoney(-1));
+            dispatch(incrementMoney(-1 * bugFixCost));
             dispatch(incrementBugs(-1 * perClick));
             dispatch(incrementNumBugFixClicks(1));
           }}
-          disabled={money < 1 || bugs === 0}
+          disabled={money < bugFixCost || bugs === 0}
         >
           Fix bugs
         </Button>
       </span>
     </Tooltip>
   );
+  const featureCost = roundMoney(Math.pow(features, 1.5));
   const createFeaturesButton = (
     <Tooltip
-      title={`-1 Money, +${roundPerSecond(perClick)} Feature, +${Math.round(features * Math.pow(0.9, bugsPerFeature))} Bugs${money === 0 ? " | Not enough money" : bugs > features ? " | Too many bugs" : ""}`}
+      title={`-${featureCost} Money, +${roundPerSecond(perClick)} Feature, +${Math.round(features * Math.pow(0.9, bugsPerFeature))} Bugs${money === 0 ? " | Not enough money" : bugs > features ? " | Too many bugs" : ""}`}
     >
       <span>
         <Button
           variant={"outlined"}
           onClick={() => {
-            dispatch(incrementMoney(-1));
+            dispatch(incrementMoney(-1 * featureCost));
             dispatch(incrementFeatures(perClick));
             dispatch(incrementBugs(features * Math.pow(0.9, bugsPerFeature)));
             dispatch(incrementNumFeatureDevelopmentClicks(1));
           }}
-          disabled={money < 1 || bugs > features}
+          disabled={money < featureCost || bugs > features}
         >
           Create game features
         </Button>
