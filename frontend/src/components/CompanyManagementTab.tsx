@@ -13,6 +13,10 @@ import { incrementOffice } from "../slices/officeSlice";
 import useMoneyPerSecond from "../hooks/useMoneyPerSecond";
 import { computeOfficeCostPerSecond, roundPerSecond } from "../utils";
 import { incrementMarketers, toggleMarketers } from "../slices/marketersSlice";
+import {
+  incrementAccountants,
+  toggleAccountants,
+} from "../slices/accountantsSlice";
 
 const computeCost = (
   currentAmount: number,
@@ -46,6 +50,7 @@ const computeRefund = (
 const BUG_FIXER_MULTIPLIER = 2;
 const FEATURE_DEVELOPER_MULTIPLIER = 3;
 const MARKETER_MULTIPLIER = 4;
+const ACCOUNTANT_MULTIPLIER = 5;
 
 type Props = {
   hireAmount: number;
@@ -62,7 +67,8 @@ const useHeadCount = () => {
     (state) => state.featureDevelopers.value,
   );
   const marketers = useAppSelector((state) => state.marketers.value);
-  return bugFixers + featureDevelopers + marketers;
+  const accountants = useAppSelector((state) => state.accountants.value);
+  return bugFixers + featureDevelopers + marketers + accountants;
 };
 
 const useHasMoreOfficeSpace = (props: { hireAmount: number }) => {
@@ -249,6 +255,102 @@ const MarketersRow = ({ hireAmount }: BugFixersRowProps) => {
                 onClick={() => {
                   dispatch(incrementMoney(-1 * marketerCostAmount));
                   dispatch(incrementMarketers(hireAmount));
+                }}
+              >
+                <Add />
+              </IconButton>
+            </div>
+          </Tooltip>
+        </div>
+      </Stack>
+    </>
+  );
+};
+
+const AccountantsRow = ({ hireAmount }: BugFixersRowProps) => {
+  const dispatch = useAppDispatch();
+  const isAccountantsPaused = useAppSelector(
+    (state) => !state.accountants.enabled,
+  );
+  const accountants = useAppSelector((state) => state.accountants.value);
+  const money = useAppSelector((state) => state.money.value);
+
+  const hasMoreOfficeSpace = useHasMoreOfficeSpace({ hireAmount });
+
+  const refund = computeRefund(
+    accountants,
+    hireAmount,
+    ACCOUNTANT_MULTIPLIER,
+    0,
+  );
+  const costAmount = computeCost(
+    accountants,
+    hireAmount,
+    ACCOUNTANT_MULTIPLIER,
+    0,
+  );
+  const canHire = money >= costAmount && hasMoreOfficeSpace;
+  const canFire = accountants >= hireAmount;
+
+  let whyCannotHire = "";
+  if (!canHire) {
+    if (money < costAmount) {
+      whyCannotHire = ` | Need at least $${costAmount}`;
+    } else {
+      whyCannotHire = " | Not enough office space";
+    }
+  }
+  let whyCannotFire = "";
+  if (!canFire) {
+    whyCannotFire = " | Not enough accountants to fire";
+  }
+
+  return (
+    <>
+      <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+        <Typography>Off</Typography>
+        <Switch
+          checked={!isAccountantsPaused}
+          onChange={() => dispatch(toggleAccountants())}
+        />
+        <Typography>On</Typography>
+      </Stack>
+      <Stack
+        direction={"row"}
+        spacing={2}
+        sx={{
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <div>
+          <Tooltip
+            title={`+${refund} Money, -${hireAmount} Accountants${whyCannotFire}`}
+          >
+            <div>
+              <IconButton
+                disabled={!canFire}
+                onClick={() => {
+                  dispatch(incrementAccountants(-1 * hireAmount));
+                  dispatch(incrementMoney(refund));
+                }}
+              >
+                <Remove />
+              </IconButton>
+            </div>
+          </Tooltip>
+        </div>
+        <Typography>Accountants: {accountants}</Typography>
+        <div>
+          <Tooltip
+            title={`-${costAmount} Money, +${hireAmount} Accountants${whyCannotHire}`}
+          >
+            <div>
+              <IconButton
+                disabled={!canHire}
+                onClick={() => {
+                  dispatch(incrementMoney(-1 * costAmount));
+                  dispatch(incrementAccountants(hireAmount));
                 }}
               >
                 <Add />
@@ -468,6 +570,7 @@ const CompanyManagementTab = ({ hireAmount, setHireAmount }: Props) => {
       <BugFixersRow hireAmount={hireAmount} />
       <FeatureDevelopersRow hireAmount={hireAmount} />
       <MarketersRow hireAmount={hireAmount} />
+      <AccountantsRow hireAmount={hireAmount} />
       <OfficesRow hireAmount={hireAmount} />
     </>
   );

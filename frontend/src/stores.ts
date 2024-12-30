@@ -19,9 +19,11 @@ import { numClicksReducer } from "./slices/numClicksSlice";
 import { hypeReducer } from "./slices/hypeSlice";
 import { marketerReducer } from "./slices/marketersSlice";
 import { marketerCostReducer } from "./slices/marketerCostSlice";
+import { accountantsReducer } from "./slices/accountantsSlice";
 
 export const store = configureStore({
   reducer: {
+    accountants: accountantsReducer,
     money: moneyReducer,
     bugs: bugsReducer,
     hype: hypeReducer,

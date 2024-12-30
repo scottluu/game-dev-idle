@@ -7,6 +7,8 @@ const useMoneyPerSecond = () => {
   const hype = useAppSelector((state) => state.hype.value);
   const money = useAppSelector((state) => state.money.value);
   const marketers = useAppSelector((state) => state.marketers.value);
+  const features = useAppSelector((state) => state.features.value);
+  const accountants = useAppSelector((state) => state.accountants.value);
   const featureDevelopers = useAppSelector(
     (state) => state.featureDevelopers.value,
   );
@@ -26,6 +28,8 @@ const useMoneyPerSecond = () => {
     money,
     featureDevelopers,
     bugFixers,
+    accountants,
+    features,
   );
 };
 

@@ -62,12 +62,16 @@ export const computeMoneyPerSecond = (
   money: number,
   featureDevelopers: number,
   bugFixers: number,
+  accountants: number,
+  features: number,
 ) => {
   let revenue = 0;
   const hypePerSecond = computeHypePerSecond(
     marketers,
     isMarketersEnabled,
     money,
+    features,
+    hype,
   );
   const marketersCost = Math.pow(hypePerSecond, 2);
   const featureDeveloperCost = Math.pow(featureDevelopers, 2);
@@ -88,6 +92,8 @@ export const computeMoneyPerSecond = (
       ),
     );
   }
+  const taxes = Math.max(0, revenue * 0.5 - accountants);
+  expenses += taxes;
   const moneyPerSecondRaw = revenue - expenses;
 
   const moneyPerSecondAsCents = moneyPerSecondRaw * 100;
@@ -160,7 +166,7 @@ export const computeFeaturesPerSecond = (
 
 export const computeOfficeCostPerSecond = (office: number) => {
   if (office === 0) return 0;
-  return roundPerSecond(Math.pow(1.6, office));
+  return roundPerSecond(Math.pow(4, office));
 };
 
 export const sum = (numbers: number[]) => {
@@ -203,8 +209,11 @@ export const computeHypePerSecond = (
   marketers: number,
   isMarketersEnabled: boolean,
   money: number,
+  features: number,
+  hype: number,
 ) => {
   if (money <= 0) return 0;
   if (!isMarketersEnabled) return 0;
+  if (hype > Math.pow(features, 1.5)) return 0;
   return Math.pow(marketers, 0.25);
 };
