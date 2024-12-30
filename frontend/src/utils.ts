@@ -15,7 +15,7 @@ export const getBooleanWithDefault = (
 };
 
 const computeFunTerm = (features: number, bugs: number) => {
-  const featureTerm = Math.pow(features, 1.15) / 100;
+  const featureTerm = Math.pow(features, 0.5);
   const bugTerm = Math.pow(bugs, 1.5) / 100;
   return featureTerm - bugTerm;
 };
@@ -64,9 +64,10 @@ export const computeMoneyPerSecond = (
     isMarketersEnabled,
     money,
   );
-  let expenses = computeOfficeCostPerSecond(office) + hypePerSecond;
+  let expenses =
+    computeOfficeCostPerSecond(office) + Math.pow(hypePerSecond, 2);
   if (hypePerSecond > 0) {
-    expenses += Math.pow(hype, 0.5);
+    expenses += Math.pow(hype, 0.75);
   }
   if (gameStats.length > 0) {
     revenue += sum(
