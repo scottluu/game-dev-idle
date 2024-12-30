@@ -13,6 +13,14 @@ const moneySlice = createSlice({
   reducers: {
     // Use the PayloadAction type to declare the contents of `action.payload`
     incrementMoney: (state, action: PayloadAction<number>) => {
+      if (
+        state.value === Number.POSITIVE_INFINITY ||
+        state.value + action.payload > Number.MAX_SAFE_INTEGER
+      ) {
+        state.value = Number.MAX_SAFE_INTEGER;
+        return;
+      }
+
       state.value += action.payload;
     },
     resetMoney: (state) => {
