@@ -201,5 +201,5 @@ export const computeHypePerSecond = (
 ) => {
   if (money <= 0) return 0;
   if (!isMarketersEnabled) return 0;
-  return Math.pow(marketers, 0.5);
+  return Math.pow(marketers, 0.25);
 };
