@@ -191,7 +191,11 @@ const MainTab = () => {
       </span>
     </Tooltip>
   );
-  const hypeCost = roundMoney(Math.pow(hype * (features + 1), 0.75));
+  let hypeCost = Math.pow(hype * (features + 1), 0.75);
+  if (Math.abs(computeHypePenalty(hype, features, bugs)) > 0) {
+    hypeCost = Math.pow(hype, 2);
+  }
+  hypeCost = roundMoney(hypeCost);
   const createHypeButton = (
     <Tooltip
       title={`-${hypeCost} Money, +${roundPerSecond(perClick)} Hype${money === 0 ? " | Not enough money" : ""}`}
