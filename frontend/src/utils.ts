@@ -24,8 +24,11 @@ export const computeHypePenalty = (
   features: number,
   bugs: number,
 ) => {
+  const funTerm = computeFunTerm(features, bugs);
   return hype > (features - bugs) * 1.5
-    ? -0.9 * computeFunTerm(features, bugs)
+    ? funTerm > 0
+      ? -0.9 * funTerm
+      : 2 * funTerm
     : 0;
 };
 
