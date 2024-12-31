@@ -1,6 +1,10 @@
 import useAppSelector from "../hooks/useAppSelector";
 import { Table } from "@mui/joy";
-import { computeMoneyPerSecondForSingleGame, roundMoney } from "../utils";
+import {
+  computeAgePenalty,
+  computeMoneyPerSecondForSingleGame,
+  roundMoney,
+} from "../utils";
 
 const ReleasedGamesTab = () => {
   const releasedGames = useAppSelector((state) => state.releasedGames.value);
@@ -14,7 +18,9 @@ const ReleasedGamesTab = () => {
           <th>Name</th>
           <th>Features</th>
           <th>Bugs</th>
-          <th>$/Second</th>
+          <th>Hype</th>
+          <th>Revenue ($/Second)</th>
+          <th>Age Penalty ($/Second)</th>
         </tr>
       </thead>
       <tbody>
@@ -28,6 +34,7 @@ const ReleasedGamesTab = () => {
               </td>
               <td>{Math.round(releasedGame.features)}</td>
               <td>{Math.round(releasedGame.bugs)}</td>
+              <td>{Math.round(releasedGame.hype)}</td>
               <td>
                 {roundMoney(
                   computeMoneyPerSecondForSingleGame(
@@ -37,6 +44,7 @@ const ReleasedGamesTab = () => {
                   ),
                 )}
               </td>
+              <td>{computeAgePenalty(releasedGames.length - index - 1)}</td>
             </tr>
           );
         })}
