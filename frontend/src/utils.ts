@@ -32,6 +32,9 @@ export const computeHypePenalty = (
     : 0;
 };
 
+export const computeAgePenalty = (age: number) => {
+  return Math.pow(0.5, age);
+};
 export const computeMoneyPerSecondForSingleGame = (
   gameStat: GameStats,
   gameProfitability: number,
@@ -45,7 +48,7 @@ export const computeMoneyPerSecondForSingleGame = (
     gameStat.features,
     gameStat.bugs,
   );
-  const ageMultiplier = Math.pow(0.5, age);
+  const ageMultiplier = computeAgePenalty(age);
   const multipliers = profitabilityMultiplier * hypeMultiplier * ageMultiplier;
   const terms = funTerm + hypeTerm;
 
@@ -189,7 +192,7 @@ export const computeFeaturesPerSecond = (
 
 export const computeOfficeCostPerSecond = (office: number) => {
   if (office === 0) return 0;
-  return roundPerSecond(Math.pow(4, office));
+  return roundPerSecond(Math.pow(1.6, office) + Math.pow(3.2, office) / 300);
 };
 
 export const sum = (numbers: number[]) => {
